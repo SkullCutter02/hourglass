@@ -15,3 +15,8 @@ export const authSignUpSchema = yup.object({
     })
     .required(), // minimum 8 characters, at least one uppercase character and one number
 });
+
+export const authLogInSchema = yup.object({
+  credentials: yup.string().required(),
+  password: yup.string().required(),
+});

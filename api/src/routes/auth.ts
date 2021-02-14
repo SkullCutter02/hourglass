@@ -5,7 +5,8 @@ import * as jwt from "jsonwebtoken";
 
 import User from "../entity/User";
 import validateDto from "../middleware/validateDto";
-import { authSignUpSchema } from "../dto/auth";
+import { authSignUpSchema, authLogInSchema } from "../dto/auth";
+import cookieOptions from "../utils/cookieOptions";
 
 const router = Router();
 
@@ -26,11 +27,42 @@ router.post("/signup", validateDto(authSignUpSchema), async (req: Request, res: 
       await user.save();
 
       jwt.sign({ uuid: user.uuid }, "secretkey", (err: Error, token: string) => {
-        if (err) throw err;
+        if (err) return res.status(500).json(err);
 
-        res.cookie("token", token, { httpOnly: true, maxAge: 2_592_000_000 }); // 30 days
+        res.cookie("token", token, cookieOptions);
         return res.json({ token, user });
       });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ err: "Something went wrong" });
+  }
+});
+
+router.post("/login", validateDto(authLogInSchema), async (req: Request, res: Response) => {
+  try {
+    const { credentials, password }: TypeOf<typeof authLogInSchema> = req.body;
+
+    let user: User;
+    let isValidPassword: boolean;
+
+    if (credentials.includes("@")) {
+      user = await User.findOne({ email: credentials });
+    } else {
+      user = await User.findOne({ username: credentials });
+    }
+
+    if (user) isValidPassword = await argon2.verify(user.hash, password);
+
+    if (user && isValidPassword) {
+      jwt.sign({ uuid: user.uuid }, "secretkey", (err: Error, token: string) => {
+        if (err) return res.status(500).json(err);
+
+        res.cookie("token", token, cookieOptions);
+        return res.json({ token, user });
+      });
+    } else {
+      return res.status(500).json({ err: "Invalid Credentials" });
     }
   } catch (err) {
     console.log(err);
