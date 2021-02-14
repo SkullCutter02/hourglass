@@ -8,6 +8,6 @@ app.use(express.json());
 
 createConnection()
   .then(() => {
-    app.listen(5000, () => console.log("Server started on port 5000"));
+    app.listen(5000, () => console.log("Server started"));
   })
   .catch((err) => console.log(err));
