@@ -16,7 +16,7 @@ const verifyToken = () => (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } else {
-    return res.status(403).json({ msg: "access forbidden" });
+    return res.status(403).json({ msg: "Access Forbidden" });
   }
 };
 

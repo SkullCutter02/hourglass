@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Request, Response, Router } from "express";
 import type { TypeOf } from "yup";
 import * as argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
@@ -7,7 +7,7 @@ import { v4 as uuid } from "uuid";
 import User from "../entity/User";
 import validateDto from "../middleware/validateDto";
 import verifyToken from "../middleware/verifyToken";
-import { authSignUpSchema, authLogInSchema, authSendEmailSchema } from "../dto/auth";
+import { authLogInSchema, authResetPassSchema, authSendEmailSchema, authSignUpSchema } from "../dto/auth";
 import { AuthDataType } from "../types/authDataType";
 import cookieOptions from "../utils/cookieOptions";
 import client from "../utils/redisClient";
@@ -23,9 +23,9 @@ router.post("/signup", validateDto(authSignUpSchema), async (req: Request, res: 
     const checkUsername = await User.findOne({ username });
 
     if (checkEmail) {
-      return res.status(500).json({ msg: "email already exists" });
+      return res.status(500).json({ msg: "Email already exists" });
     } else if (checkUsername) {
-      return res.status(500).json({ msg: "username already taken" });
+      return res.status(500).json({ msg: "Username already taken" });
     } else {
       const hash = await argon2.hash(password);
       const user = User.create({ username, email, hash });
@@ -105,19 +105,15 @@ router.post("/forgot", validateDto(authSendEmailSchema), async (req: Request, re
     if (user) {
       const uniqueIdentifier = uuid();
 
-      const storedObject = {
-        uuid: uniqueIdentifier,
-        userUuid: user.uuid,
-      };
-
-      client.setex(`forgot_${uniqueIdentifier}`, 1800, JSON.stringify(storedObject)); // 30 minutes
+      client.setex(`forgot_${uniqueIdentifier}`, 1800, user.uuid); // 30 minutes
 
       transporter.sendMail(
         {
           from: "coolalan2016@gmail.com",
           to: email,
           subject: "Click here to change your password!",
-          html: `<p>Hello! Please click this link to reset your password: ${process.env.HOST}/auth/reset/${uniqueIdentifier}</p>`,
+          html: `<p>Hello! Please click this link to reset your password: ${process.env.HOST}/auth/reset/${uniqueIdentifier} 
+                  <br><br> This link will expire in 30 minutes so if the link doesn't work, please request a new one</p>`,
         },
         (err: Error, info) => {
           if (err) throw err;
@@ -130,6 +126,34 @@ router.post("/forgot", validateDto(authSendEmailSchema), async (req: Request, re
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
+  }
+});
+
+router.patch("/reset", validateDto(authResetPassSchema), (req: Request, res: Response) => {
+  try {
+    const { uuid, password }: TypeOf<typeof authResetPassSchema> = req.body;
+
+    client.get(`forgot_${uuid}`, async (err: Error, data: string) => {
+      if (err) throw err;
+
+      // data equals to the user's uuid
+      if (data !== null) {
+        const user = await User.findOneOrFail({ uuid: data });
+        user.hash = await argon2.hash(password);
+
+        await user.save();
+
+        client.del(`forgot_${uuid}`, (err: Error, _) => {
+          if (err) throw err;
+          return res.json(user);
+        });
+      } else {
+        return res.status(500).json({ msg: "Link has expired" });
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
   }
 });
 
