@@ -4,7 +4,7 @@ import type { TypeOf } from "yup";
 import Project from "../entity/Project";
 import User from "../entity/User";
 import ProjectMembers from "../entity/ProjectMembers";
-import { createProjectSchema } from "../schemas/projects";
+import { createProjectSchema, patchProjectSchema } from "../schemas/projects";
 import validateSchema from "../middleware/validateSchema";
 import verifyToken from "../middleware/verifyToken";
 import { AuthDataType } from "../types/authDataType";
@@ -50,6 +50,40 @@ router.post("/", validateSchema(createProjectSchema), verifyToken(), async (req:
     await projectMember.save();
 
     return res.json(projectMember);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
+router.patch("/:uuid", verifyToken(), async (req: Request, res: Response) => {
+  try {
+    const uuid: string = req.params.uuid;
+    const authData: AuthDataType = res.locals.authData;
+    const { name, description }: TypeOf<typeof patchProjectSchema> = req.body;
+
+    const project = await Project.findOneOrFail(
+      { uuid },
+      { relations: ["projectMembers", "projectMembers.user"] }
+    );
+
+    const isAdmin = project.projectMembers.some(
+      (projectMember) => projectMember.user.uuid === authData.uuid && projectMember.role === "admin"
+    );
+
+    if (isAdmin) {
+      project.name = name || project.name;
+      project.description = description || project.description;
+
+      await project.save();
+
+      client.del(`projects_${uuid}`, (err, _) => {
+        if (err) throw err;
+        return res.json(project);
+      });
+    } else {
+      return res.status(500).json({ msg: "You do not have access to change this project" });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json({ msg: "Something went wrong" });

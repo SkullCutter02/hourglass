@@ -11,12 +11,14 @@ export default class ProjectMembers extends BaseEntity {
   @ManyToOne(() => Project, (project) => project.projectMembers, {
     primary: true,
     onDelete: "CASCADE",
+    cascade: ["update"],
   })
   project: Project;
 
   @ManyToOne(() => User, (user) => user.projectMembers, {
     primary: true,
     onDelete: "CASCADE",
+    cascade: ["update"],
   })
   user: User;
 }

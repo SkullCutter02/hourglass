@@ -17,6 +17,7 @@ export default class User extends Model {
 
   @OneToMany(() => ProjectMembers, (projectMembers) => projectMembers.user, {
     onDelete: "CASCADE",
+    cascade: ["update"],
   })
   projectMembers: ProjectMembers[];
 
