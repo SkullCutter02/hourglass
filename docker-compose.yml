@@ -21,6 +21,7 @@ services:
       - PGDATABASE=postgres
       - PGPASSWORD=postgres_password
       - PGPORT=5432
+      - HOST=http://localhost:80
     env_file:
       - ./api/.env
   nginx:

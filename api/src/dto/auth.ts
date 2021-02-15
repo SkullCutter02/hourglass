@@ -20,3 +20,7 @@ export const authLogInSchema = yup.object({
   credentials: yup.string().required(),
   password: yup.string().required(),
 });
+
+export const authSendEmailSchema = yup.object({
+  email: yup.string().email().required(),
+});

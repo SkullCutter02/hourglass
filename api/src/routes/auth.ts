@@ -2,16 +2,16 @@ import { Router, Request, Response } from "express";
 import type { TypeOf } from "yup";
 import * as argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
+import { v4 as uuid } from "uuid";
 
 import User from "../entity/User";
 import validateDto from "../middleware/validateDto";
 import verifyToken from "../middleware/verifyToken";
-import { authSignUpSchema, authLogInSchema } from "../dto/auth";
+import { authSignUpSchema, authLogInSchema, authSendEmailSchema } from "../dto/auth";
 import { AuthDataType } from "../types/authDataType";
 import cookieOptions from "../utils/cookieOptions";
 import client from "../utils/redisClient";
 import transporter from "../utils/transporter";
-import { Options } from "nodemailer/lib/sendmail-transport";
 
 const router = Router();
 
@@ -96,20 +96,37 @@ router.get("/refresh", verifyToken(), (req: Request, res: Response) => {
   }
 });
 
-router.post("/email", (req: Request, res: Response) => {
+router.post("/forgot", validateDto(authSendEmailSchema), async (req: Request, res: Response) => {
   try {
-    transporter.sendMail(
-      {
-        from: "coolalan2016@gmail.com",
-        to: "chunyaa2023@student.cis.edu.hk",
-        subject: "Test",
-        html: "<h1>Hello World!</h1>",
-      },
-      (err: Error, info) => {
-        if (err) throw err;
-        return res.json(info);
-      }
-    );
+    const { email }: TypeOf<typeof authSendEmailSchema> = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (user) {
+      const uniqueIdentifier = uuid();
+
+      const storedObject = {
+        uuid: uniqueIdentifier,
+        userUuid: user.uuid,
+      };
+
+      client.setex(`forgot_${uniqueIdentifier}`, 1800, JSON.stringify(storedObject)); // 30 minutes
+
+      transporter.sendMail(
+        {
+          from: "coolalan2016@gmail.com",
+          to: email,
+          subject: "Click here to change your password!",
+          html: `<p>Hello! Please click this link to reset your password: ${process.env.HOST}/auth/reset/${uniqueIdentifier}</p>`,
+        },
+        (err: Error, info) => {
+          if (err) throw err;
+          return res.json(info);
+        }
+      );
+    } else {
+      return res.status(500).json({ msg: "user with such email doesn't exist" });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
