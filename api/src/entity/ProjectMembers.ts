@@ -1,10 +1,10 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToOne } from "typeorm";
 
 import User from "./User";
 import Project from "./Project";
 
 @Entity("project_members")
-export default class ProjectMembers {
+export default class ProjectMembers extends BaseEntity {
   @Column()
   role: "admin" | "member";
 

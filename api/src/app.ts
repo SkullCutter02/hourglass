@@ -16,6 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/auth", require("./routes/auth"));
+app.use("/projects", require("./routes/projects"));
 
 createConnection()
   .then(() => {
