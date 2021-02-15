@@ -5,8 +5,10 @@ import * as jwt from "jsonwebtoken";
 
 import User from "../entity/User";
 import validateDto from "../middleware/validateDto";
+import verifyToken from "../middleware/verifyToken";
 import { authSignUpSchema, authLogInSchema } from "../dto/auth";
 import cookieOptions from "../utils/cookieOptions";
+import { AuthDataType } from "../types/authDataType";
 
 const router = Router();
 
@@ -30,12 +32,12 @@ router.post("/signup", validateDto(authSignUpSchema), async (req: Request, res: 
         if (err) return res.status(500).json(err);
 
         res.cookie("token", token, cookieOptions);
-        return res.json({ token, user });
+        return res.json(user);
       });
     }
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ err: "Something went wrong" });
+    return res.status(500).json({ msg: "Something went wrong" });
   }
 });
 
@@ -59,14 +61,26 @@ router.post("/login", validateDto(authLogInSchema), async (req: Request, res: Re
         if (err) return res.status(500).json(err);
 
         res.cookie("token", token, cookieOptions);
-        return res.json({ token, user });
+        return res.json(user);
       });
     } else {
       return res.status(500).json({ err: "Invalid Credentials" });
     }
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ err: "Something went wrong" });
+    return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
+router.get("/refresh", verifyToken(), async (req: Request, res: Response) => {
+  try {
+    const authData: AuthDataType = res.locals.authData;
+
+    const user = await User.findOneOrFail({ uuid: authData.uuid });
+    return res.json(user);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
   }
 });
 
