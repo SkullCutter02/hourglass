@@ -8,9 +8,15 @@ export default class ProjectMembers extends BaseEntity {
   @Column()
   role: "admin" | "member";
 
-  @ManyToOne(() => Project, (project) => project.projectMembers, { primary: true })
+  @ManyToOne(() => Project, (project) => project.projectMembers, {
+    primary: true,
+    onDelete: "CASCADE",
+  })
   project: Project;
 
-  @ManyToOne(() => User, (user) => user.projectMembers, { primary: true })
+  @ManyToOne(() => User, (user) => user.projectMembers, {
+    primary: true,
+    onDelete: "CASCADE",
+  })
   user: User;
 }

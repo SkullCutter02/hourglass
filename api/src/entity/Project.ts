@@ -11,6 +11,8 @@ export default class Project extends Model {
   @Column()
   description: string;
 
-  @OneToMany(() => ProjectMembers, (projectMembers) => projectMembers.project)
+  @OneToMany(() => ProjectMembers, (projectMembers) => projectMembers.project, {
+    onDelete: "CASCADE",
+  })
   projectMembers: ProjectMembers[];
 }

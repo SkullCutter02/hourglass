@@ -14,7 +14,7 @@ const router = Router();
 
 router.get("/:uuid", (req: Request, res: Response) => {
   try {
-    const { uuid } = req.params;
+    const uuid: string = req.params.uuid;
 
     client.get(`projects_${uuid}`, async (err: Error, data) => {
       if (err) throw err;
@@ -26,7 +26,7 @@ router.get("/:uuid", (req: Request, res: Response) => {
           { uuid },
           { relations: ["projectMembers", "projectMembers.user"] }
         );
-        client.setex(`projects_${uuid}`, 120, JSON.stringify(project));
+        client.setex(`projects_${uuid}`, 300, JSON.stringify(project)); // 5 minutes
         return res.json(project);
       }
     });
@@ -50,6 +50,32 @@ router.post("/", validateSchema(createProjectSchema), verifyToken(), async (req:
     await projectMember.save();
 
     return res.json(projectMember);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
+router.delete("/:uuid", verifyToken(), async (req: Request, res: Response) => {
+  try {
+    const uuid: string = req.params.uuid;
+    const authData: AuthDataType = res.locals.authData;
+
+    const project = await Project.findOneOrFail(
+      { uuid },
+      { relations: ["projectMembers", "projectMembers.user"] }
+    );
+
+    const isAdmin = project.projectMembers.some(
+      (projectMember) => projectMember.user.uuid === authData.uuid && projectMember.role === "admin"
+    );
+
+    if (isAdmin) {
+      await project.remove();
+      return res.json({ msg: "Project deleted successfully" });
+    } else {
+      return res.status(500).json({ msg: "You do not have access to delete this project" });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json({ msg: "Something went wrong" });

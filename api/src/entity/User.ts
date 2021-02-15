@@ -15,7 +15,9 @@ export default class User extends Model {
   @Column()
   hash: string;
 
-  @OneToMany(() => ProjectMembers, (projectMembers) => projectMembers.user)
+  @OneToMany(() => ProjectMembers, (projectMembers) => projectMembers.user, {
+    onDelete: "CASCADE",
+  })
   projectMembers: ProjectMembers[];
 
   toJSON(): any {
