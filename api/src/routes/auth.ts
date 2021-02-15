@@ -5,9 +5,9 @@ import * as jwt from "jsonwebtoken";
 import { v4 as uuid } from "uuid";
 
 import User from "../entity/User";
-import validateDto from "../middleware/validateDto";
+import validateSchema from "../middleware/validateSchema";
 import verifyToken from "../middleware/verifyToken";
-import { authLogInSchema, authResetPassSchema, authSendEmailSchema, authSignUpSchema } from "../dto/auth";
+import { authLogInSchema, authResetPassSchema, authSendEmailSchema, authSignUpSchema } from "../schemas/auth";
 import { AuthDataType } from "../types/authDataType";
 import cookieOptions from "../utils/cookieOptions";
 import client from "../utils/redisClient";
@@ -15,7 +15,7 @@ import transporter from "../utils/transporter";
 
 const router = Router();
 
-router.post("/signup", validateDto(authSignUpSchema), async (req: Request, res: Response) => {
+router.post("/signup", validateSchema(authSignUpSchema), async (req: Request, res: Response) => {
   try {
     const { username, email, password }: TypeOf<typeof authSignUpSchema> = req.body;
 
@@ -44,7 +44,7 @@ router.post("/signup", validateDto(authSignUpSchema), async (req: Request, res: 
   }
 });
 
-router.post("/login", validateDto(authLogInSchema), async (req: Request, res: Response) => {
+router.post("/login", validateSchema(authLogInSchema), async (req: Request, res: Response) => {
   try {
     const { credentials, password }: TypeOf<typeof authLogInSchema> = req.body;
 
@@ -96,7 +96,7 @@ router.get("/refresh", verifyToken(), (req: Request, res: Response) => {
   }
 });
 
-router.post("/forgot", validateDto(authSendEmailSchema), async (req: Request, res: Response) => {
+router.post("/forgot", validateSchema(authSendEmailSchema), async (req: Request, res: Response) => {
   try {
     const { email }: TypeOf<typeof authSendEmailSchema> = req.body;
 
@@ -129,7 +129,7 @@ router.post("/forgot", validateDto(authSendEmailSchema), async (req: Request, re
   }
 });
 
-router.patch("/reset", validateDto(authResetPassSchema), (req: Request, res: Response) => {
+router.patch("/reset", validateSchema(authResetPassSchema), (req: Request, res: Response) => {
   try {
     const { uuid, password }: TypeOf<typeof authResetPassSchema> = req.body;
 
@@ -155,6 +155,10 @@ router.patch("/reset", validateDto(authResetPassSchema), (req: Request, res: Res
     console.log(err);
     return res.status(500).json({ msg: "Something went wrong" });
   }
+});
+
+router.get("/access", verifyToken(), (_, res: Response) => {
+  res.json({ access: true });
 });
 
 module.exports = router;

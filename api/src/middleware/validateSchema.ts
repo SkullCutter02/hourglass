@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-const validateDto = (resourceSchema) => async (req: Request, res: Response, next: NextFunction) => {
+const validateSchema = (resourceSchema) => async (req: Request, res: Response, next: NextFunction) => {
   const resource = req.body;
 
   try {
@@ -12,4 +12,4 @@ const validateDto = (resourceSchema) => async (req: Request, res: Response, next
   }
 };
 
-export default validateDto;
+export default validateSchema;
