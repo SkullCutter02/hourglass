@@ -7,9 +7,11 @@ import User from "../entity/User";
 import validateDto from "../middleware/validateDto";
 import verifyToken from "../middleware/verifyToken";
 import { authSignUpSchema, authLogInSchema } from "../dto/auth";
-import cookieOptions from "../utils/cookieOptions";
 import { AuthDataType } from "../types/authDataType";
+import cookieOptions from "../utils/cookieOptions";
 import client from "../utils/redisClient";
+import transporter from "../utils/transporter";
+import { Options } from "nodemailer/lib/sendmail-transport";
 
 const router = Router();
 
@@ -75,7 +77,7 @@ router.post("/login", validateDto(authLogInSchema), async (req: Request, res: Re
 
 router.get("/refresh", verifyToken(), (req: Request, res: Response) => {
   try {
-    const authData: AuthDataType = res.locals.authData;
+    const authData: AuthDataType = res.locals.authData; // from middleware verifyToken
 
     client.get(`user_${authData.uuid}`, async (err: Error, data: string) => {
       if (err) throw err;
@@ -84,13 +86,33 @@ router.get("/refresh", verifyToken(), (req: Request, res: Response) => {
         return res.json(JSON.parse(data)); // returns User if it is cached
       } else {
         const user = await User.findOneOrFail({ uuid: authData.uuid });
-        client.setex(`user_${user.uuid}`, 2_592_000, JSON.stringify(user)); // 30 days
+        client.setex(`user_${user.uuid}`, 1_209_600, JSON.stringify(user)); // 14 days
         return res.json(user);
       }
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
+router.post("/email", (req: Request, res: Response) => {
+  try {
+    transporter.sendMail(
+      {
+        from: "coolalan2016@gmail.com",
+        to: "chunyaa2023@student.cis.edu.hk",
+        subject: "Test",
+        html: "<h1>Hello World!</h1>",
+      },
+      (err: Error, info) => {
+        if (err) throw err;
+        return res.json(info);
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
   }
 });
 
