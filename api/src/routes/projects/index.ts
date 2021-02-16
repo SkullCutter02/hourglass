@@ -1,14 +1,14 @@
 import { Router, Request, Response } from "express";
 import type { TypeOf } from "yup";
 
-import Project from "../entity/Project";
-import User from "../entity/User";
-import ProjectMembers from "../entity/ProjectMembers";
-import { createProjectSchema, patchProjectSchema } from "../schemas/projects";
-import validateSchema from "../middleware/validateSchema";
-import verifyToken from "../middleware/verifyToken";
-import { AuthDataType } from "../types/authDataType";
-import client from "../utils/redisClient";
+import Project from "../../entity/Project";
+import User from "../../entity/User";
+import ProjectMembers from "../../entity/ProjectMembers";
+import { createProjectSchema, patchProjectSchema } from "../../schemas/projects";
+import validateSchema from "../../middleware/validateSchema";
+import verifyToken from "../../middleware/verifyToken";
+import { AuthDataType } from "../../types/authDataType";
+import client from "../../utils/redisClient";
 
 const router = Router();
 
