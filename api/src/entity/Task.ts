@@ -1,6 +1,7 @@
-import { Entity, Column } from "typeorm";
+import { Entity, Column, ManyToOne } from "typeorm";
 
 import Model from "./Model";
+import Category from "./Category";
 
 @Entity("tasks")
 export default class Task extends Model {
@@ -15,4 +16,9 @@ export default class Task extends Model {
 
   @Column({ default: false })
   adminOnly: boolean;
+
+  @ManyToOne(() => Category, (category) => category.tasks, {
+    onDelete: "CASCADE",
+  })
+  category: Category;
 }

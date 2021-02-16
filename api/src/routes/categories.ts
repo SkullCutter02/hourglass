@@ -8,7 +8,6 @@ import { postCategorySchema, patchCategorySchema } from "../schemas/categories";
 import { AuthDataType } from "../types/authDataType";
 import validateSchema from "../middleware/validateSchema";
 import client from "../utils/redisClient";
-import has = Reflect.has;
 
 const router = Router();
 
