@@ -80,4 +80,50 @@ router.post("/accept/:uuid", verifyToken(), async (req: Request, res: Response) 
   }
 });
 
+router.patch("/leave/:projectUuid", verifyToken(), async (req: Request, res: Response) => {
+  try {
+    const { projectUuid } = req.params;
+    const authData: AuthDataType = res.locals.authData;
+
+    const project = await Project.findOneOrFail(
+      { uuid: projectUuid },
+      { relations: ["projectMembers", "projectMembers.user"] }
+    );
+
+    if (project.projectMembers.length === 1 && project.projectMembers[0].user.uuid === authData.uuid) {
+      await project.remove();
+      return res.json({
+        msg: "User left the project. Since user is the only member in this project, the project is deleted",
+      });
+    } else {
+      const isAdmin = project.projectMembers.some(
+        (projectMember) => projectMember.user.uuid === authData.uuid && projectMember.role === "admin"
+      );
+
+      project.projectMembers = project.projectMembers.filter(
+        (projectMember) => projectMember.user.uuid !== authData.uuid
+      );
+
+      const user = await User.findOneOrFail({ uuid: authData.uuid });
+      const projectMember = await ProjectMembers.findOneOrFail({ projectId: project.id, userId: user.id });
+      await projectMember.remove();
+
+      // if the user is an admin in the project, then randomly give another member in the project admin access
+      if (isAdmin) {
+        project.projectMembers[0].role = "admin";
+      }
+
+      await project.save();
+
+      client.del(`projects_${project.uuid}`, (err: Error, _) => {
+        if (err) throw err;
+        return res.json({ msg: "User left the project" });
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
 module.exports = router;

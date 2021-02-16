@@ -6,9 +6,9 @@ import Project from "./Project";
 
 @Entity("project_request") // this entity is not a joint table
 export default class ProjectRequest extends Model {
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { nullable: false })
   user: User;
 
-  @ManyToOne(() => Project)
+  @ManyToOne(() => Project, { nullable: false })
   project: Project;
 }
