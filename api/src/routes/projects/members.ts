@@ -126,4 +126,41 @@ router.patch("/leave/:projectUuid", verifyToken(), async (req: Request, res: Res
   }
 });
 
+router.delete("/kick/:userUuid", verifyToken(), async (req: Request, res: Response) => {
+  try {
+    const { userUuid } = req.params;
+    const projectUuid: string = req.body.projectUuid;
+    const authData: AuthDataType = res.locals.authData;
+
+    const project = await Project.findOneOrFail(
+      { uuid: projectUuid },
+      { relations: ["projectMembers", "projectMembers.user"] }
+    );
+
+    const isAdmin = project.projectMembers.some(
+      (projectMember) => projectMember.user.uuid === authData.uuid && projectMember.role === "admin"
+    );
+
+    if (isAdmin) {
+      if (userUuid === authData.uuid) {
+        return res.status(500).json({ msg: "You can't kick yourself out of the project" });
+      }
+
+      client.del(`projects_${project.uuid}`, async (err: Error, _) => {
+        const user = await User.findOneOrFail({ uuid: userUuid });
+        const projectMember = await ProjectMembers.findOneOrFail({ projectId: project.id, userId: user.id });
+        await projectMember.remove();
+
+        if (err) throw err;
+        return res.json({ msg: "Member successfully kicked out of the project" });
+      });
+    } else {
+      return res.status(403).json({ msg: "You do not have access to kick a member out of the project" });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
 module.exports = router;
