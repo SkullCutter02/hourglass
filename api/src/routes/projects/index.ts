@@ -24,7 +24,7 @@ router.get("/:uuid", (req: Request, res: Response) => {
       } else {
         const project = await Project.findOneOrFail(
           { uuid },
-          { relations: ["projectMembers", "projectMembers.user"] }
+          { relations: ["projectMembers", "projectMembers.user", "categories"] }
         );
         client.setex(`projects_${uuid}`, 300, JSON.stringify(project)); // 5 minutes
         return res.json(project);

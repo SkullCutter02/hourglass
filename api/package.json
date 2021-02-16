@@ -5,8 +5,9 @@
    "main": "index.js",
    "scripts": {
       "dev": "nodemon src/app.ts",
-      "start": "ts-node src/app.ts",
-      "typeorm": "ts-node ./node_modules/typeorm/cli.js"
+      "start": "ts-node build/app.ts",
+      "typeorm": "ts-node ./node_modules/typeorm/cli.js",
+      "build": "tsc"
    },
    "keywords": [],
    "author": "",
