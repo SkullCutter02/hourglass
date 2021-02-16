@@ -8,6 +8,7 @@ import { postCategorySchema, patchCategorySchema } from "../schemas/categories";
 import { AuthDataType } from "../types/authDataType";
 import validateSchema from "../middleware/validateSchema";
 import client from "../utils/redisClient";
+import has = Reflect.has;
 
 const router = Router();
 
@@ -119,5 +120,35 @@ router.patch(
     }
   }
 );
+
+router.delete("/:categoryUuid", verifyToken(), async (req: Request, res: Response) => {
+  try {
+    const { categoryUuid } = req.params;
+    const projectUuid: string = req.body.projectUuid;
+    const authData: AuthDataType = res.locals.authData;
+
+    const project = await Project.findOneOrFail(
+      { uuid: projectUuid },
+      { relations: ["projectMembers", "projectMembers.user", "categories"] }
+    );
+
+    const hasAccess = project.projectMembers.some(
+      (projectMember) => projectMember.user.uuid === authData.uuid
+    );
+
+    if (hasAccess) {
+      const category = await Category.findOneOrFail({ uuid: categoryUuid });
+      await category.remove();
+
+      client.del(`projects_${project.uuid}`);
+      return res.json({ msg: "Category is deleted successfully" });
+    } else {
+      return res.status(403).json({ msg: "You do not have access to delete this category" });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
 
 module.exports = router;
