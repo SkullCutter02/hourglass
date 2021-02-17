@@ -155,4 +155,50 @@ router.patch(
   }
 );
 
+router.delete("/:taskUuid", verifyToken(), async (req: Request, res: Response) => {
+  try {
+    const { taskUuid } = req.params;
+    const authData: AuthDataType = res.locals.authData;
+
+    const task = await Task.findOneOrFail(
+      { uuid: taskUuid },
+      {
+        relations: [
+          "category",
+          "category.project",
+          "category.project.projectMembers",
+          "category.project.projectMembers.user",
+        ],
+      }
+    );
+
+    const isMember = task.category.project.projectMembers.some(
+      (projectMember) => projectMember.user.uuid === authData.uuid
+    );
+
+    if (isMember) {
+      if (task.adminOnly) {
+        const isAdmin = task.category.project.projectMembers.some(
+          (projectMember) => projectMember.user.uuid === authData.uuid && projectMember.role === "admin"
+        );
+
+        if (!isAdmin) {
+          return res
+            .status(403)
+            .json({ msg: "You do not have access to delete this task as this task is admin only" });
+        }
+      }
+
+      client.del(`projects_${task.category.project.uuid}`);
+      await task.remove();
+      return res.json({ msg: "Task successfully deleted" });
+    } else {
+      return res.status(403).json({ msg: "You do not have access to delete this task" });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
 module.exports = router;
