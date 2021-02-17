@@ -46,7 +46,14 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const { projectUuid } = req.params;
-      const { name, description, dueDate, adminOnly, categoryUuid }: TypeOf<typeof postTaskSchema> = req.body;
+      const {
+        name,
+        description,
+        dueDate,
+        notifiedTime,
+        adminOnly,
+        categoryUuid,
+      }: TypeOf<typeof postTaskSchema> = req.body;
       const authData: AuthDataType = res.locals.authData;
 
       if (!isDatePast(dueDate)) {
