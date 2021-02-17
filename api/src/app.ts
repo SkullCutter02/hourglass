@@ -7,11 +7,19 @@ import * as webpush from "web-push";
 
 import { limiter } from "./middleware/rateLimit";
 
+// TODO: Work with web-push and cron
+
 AWS.config.update({
   accessKeyId: process.env.AWS_SES_ACCESS_KEY,
   secretAccessKey: process.env.AWS_SES_SECRET_KEY,
   region: "us-east-2",
 });
+
+webpush.setVapidDetails(
+  "mailto:example@yourdomain.org",
+  process.env.PUBLIC_VAPID_KEY,
+  process.env.PRIVATE_VAPID_KEY
+);
 
 const app: express.Application = express();
 
