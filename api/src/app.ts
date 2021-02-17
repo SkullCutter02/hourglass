@@ -4,6 +4,8 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import * as AWS from "aws-sdk";
 
+import { limiter } from "./middleware/rateLimit";
+
 AWS.config.update({
   accessKeyId: process.env.AWS_SES_ACCESS_KEY,
   secretAccessKey: process.env.AWS_SES_SECRET_KEY,
@@ -12,8 +14,14 @@ AWS.config.update({
 
 const app: express.Application = express();
 
+app.set("trust proxy", 1);
+
 app.use(express.json());
 app.use(cookieParser());
+
+app.use("/projects/", limiter);
+app.use("/categories/", limiter);
+app.use("/tasks/", limiter);
 
 app.use("/auth", require("./routes/auth"));
 app.use("/projects", require("./routes/projects"));

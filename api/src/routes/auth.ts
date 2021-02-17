@@ -12,10 +12,11 @@ import { AuthDataType } from "../types/authDataType";
 import cookieOptions from "../utils/cookieOptions";
 import client from "../utils/redisClient";
 import transporter from "../utils/transporter";
+import { authLimiter } from "../middleware/rateLimit";
 
 const router = Router();
 
-router.post("/signup", validateSchema(authSignUpSchema), async (req: Request, res: Response) => {
+router.post("/signup", authLimiter, validateSchema(authSignUpSchema), async (req: Request, res: Response) => {
   try {
     const { username, email, password }: TypeOf<typeof authSignUpSchema> = req.body;
 
@@ -44,7 +45,7 @@ router.post("/signup", validateSchema(authSignUpSchema), async (req: Request, re
   }
 });
 
-router.post("/login", validateSchema(authLogInSchema), async (req: Request, res: Response) => {
+router.post("/login", authLimiter, validateSchema(authLogInSchema), async (req: Request, res: Response) => {
   try {
     const { credentials, password }: TypeOf<typeof authLogInSchema> = req.body;
 
