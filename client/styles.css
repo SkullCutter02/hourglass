@@ -11,3 +11,7 @@ body {
 button {
   cursor: pointer;
 }
+
+.err-msg {
+  color: #c60606;
+}

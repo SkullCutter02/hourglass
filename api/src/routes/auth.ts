@@ -68,7 +68,7 @@ router.post("/login", authLimiter, validateSchema(authLogInSchema), async (req: 
         return res.json(user);
       });
     } else {
-      return res.status(500).json({ err: "Invalid Credentials" });
+      return res.status(500).json({ msg: "Invalid Credentials" });
     }
   } catch (err) {
     console.log(err);

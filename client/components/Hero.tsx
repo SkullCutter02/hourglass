@@ -26,7 +26,7 @@ const Hero: React.FC = () => {
               <ArrowButton
                 text={"Log In"}
                 buttonColor={"#d2d90c"}
-                textColor={"#451570"}
+                textColor={"#fff"}
                 textSize={17}
                 buttonHoverColor={"#b0c30b"}
                 link={"/auth/login"}
