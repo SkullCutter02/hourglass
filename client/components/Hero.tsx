@@ -1,15 +1,38 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 import ArrowButton from "./reusable/ArrowButton";
 import userState from "../state/userState";
+import logout from "../utils/logout";
 
 const Hero: React.FC = () => {
+  const router = useRouter();
   const user = useRecoilValue(userState);
+
+  const logoutFn = async () => {
+    await logout(router);
+  };
 
   return (
     <React.Fragment>
       <div className="hero-container">
+        {user && (
+          <div className="hero-container-upper-right">
+            <ArrowButton
+              text={"Logout"}
+              buttonColor={"#3598dc"}
+              buttonHoverColor={"#2a80b9"}
+              textColor={"#fff"}
+              textSize={12}
+              onClick={logoutFn}
+            />
+            <Link href={"/dashboard"}>
+              <p>Go to Dashboard</p>
+            </Link>
+          </div>
+        )}
         <div className="hero-middle">
           <img src={"/hourglass.png"} alt="hourglass" className="hero-png" />
           <div className="hero-middle-right">
@@ -46,6 +69,24 @@ const Hero: React.FC = () => {
           height: 100vh;
           position: relative;
           background: #e2e2e2;
+        }
+
+        .hero-container-upper-right {
+          position: absolute;
+          top: 10px;
+          right: 50px;
+          display: flex;
+          align-items: center;
+        }
+
+        .hero-container-upper-right p {
+          text-decoration: underline;
+          cursor: pointer;
+          margin: 0 20px;
+        }
+
+        .hero-container-upper-right p:hover {
+          color: #4e4e4e;
         }
 
         .hero-middle {

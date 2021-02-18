@@ -76,6 +76,16 @@ router.post("/login", authLimiter, validateSchema(authLogInSchema), async (req: 
   }
 });
 
+router.post("/logout", verifyToken(), (_, res: Response) => {
+  try {
+    res.clearCookie("token");
+    return res.json({ logout: "Successful" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
 router.get("/refresh", verifyToken(), (req: Request, res: Response) => {
   try {
     const authData: AuthDataType = res.locals.authData; // from middleware verifyToken

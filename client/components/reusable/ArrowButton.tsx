@@ -8,20 +8,29 @@ interface Props {
   textColor: string;
   textSize: number;
   link?: string;
+  onClick?: () => void;
 }
 
-const ArrowButton: React.FC<Props> = ({ text, buttonColor, textColor, textSize, buttonHoverColor, link }) => {
+const ArrowButton: React.FC<Props> = ({
+  text,
+  buttonColor,
+  textColor,
+  textSize,
+  buttonHoverColor,
+  link,
+  onClick,
+}) => {
   return (
     <React.Fragment>
       {link ? (
         <Link href={link}>
-          <button className="arrow-button">
+          <button className="arrow-button" onClick={onClick}>
             {text}
             <span className="arrow" />
           </button>
         </Link>
       ) : (
-        <button className="arrow-button">
+        <button className="arrow-button" onClick={onClick}>
           {text}
           <span className="arrow" />
         </button>
