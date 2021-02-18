@@ -7,3 +7,7 @@
 body {
   font-family: "Inter", Calibre, "San Francisco", "SF Pro Text", -apple-system, system-ui, sans-serif;
 }
+
+button {
+  cursor: pointer;
+}

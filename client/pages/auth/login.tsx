@@ -1,7 +1,9 @@
 import React from "react";
 
-const LogInPage = () => {
-  return <div>login</div>;
+import LogInPageContainer from "../../components/containers/LogInPageContainer";
+
+const LogInPage: React.FC = () => {
+  return <LogInPageContainer />;
 };
 
 export default LogInPage;
