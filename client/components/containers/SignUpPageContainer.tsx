@@ -1,11 +1,13 @@
 import React, { useRef } from "react";
 import { useSetRecoilState } from "recoil";
+import { useRouter } from "next/router";
 
 import AnimatedInput from "../reusable/AnimatedInput";
 import AuthButton from "../reusable/AuthButton";
 import userState from "../../state/userState";
 
 const SignUpPageContainer: React.FC = () => {
+  const router = useRouter();
   const setUserState = useSetRecoilState(userState);
 
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -45,8 +47,8 @@ const SignUpPageContainer: React.FC = () => {
           }
         }
 
-        console.log(data);
         setUserState(data);
+        await router.push("/dashboard");
       } catch (err) {
         errMsgRef.current.textContent = err;
       }

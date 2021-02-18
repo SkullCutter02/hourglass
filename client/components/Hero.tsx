@@ -1,8 +1,12 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
 
 import ArrowButton from "./reusable/ArrowButton";
+import userState from "../state/userState";
 
 const Hero: React.FC = () => {
+  const user = useRecoilValue(userState);
+
   return (
     <React.Fragment>
       <div className="hero-container">
@@ -21,7 +25,7 @@ const Hero: React.FC = () => {
                 textColor={"#fff"}
                 textSize={17}
                 buttonHoverColor={"#0e7c79"}
-                link={"/auth/signup"}
+                link={user ? "dashboard" : "/auth/signup"}
               />
               <ArrowButton
                 text={"Log In"}
@@ -29,7 +33,7 @@ const Hero: React.FC = () => {
                 textColor={"#fff"}
                 textSize={17}
                 buttonHoverColor={"#b0c30b"}
-                link={"/auth/login"}
+                link={user ? "dashboard" : "/auth/login"}
               />
             </div>
           </div>

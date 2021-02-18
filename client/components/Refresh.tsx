@@ -12,7 +12,11 @@ const Refresh: React.FC = () => {
       credentials: "include",
     })
       .then((res) => res.json())
-      .then((data) => setUserState(data))
+      .then((data) => {
+        if (!data.msg) {
+          setUserState(data);
+        }
+      })
       .catch((err) => console.log(err));
   }, []);
 
