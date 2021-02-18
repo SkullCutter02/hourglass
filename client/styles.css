@@ -1,0 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Calibre, "San Francisco", "SF Pro Text", -apple-system, system-ui, sans-serif;
+}
