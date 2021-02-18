@@ -3,6 +3,8 @@ import Head from "next/head";
 import React from "react";
 import { RecoilRoot } from "recoil";
 
+import Refresh from "../components/Refresh";
+
 import "../styles.css";
 
 function App({ Component, pageProps }: AppProps) {
@@ -17,6 +19,7 @@ function App({ Component, pageProps }: AppProps) {
             rel="stylesheet"
           />
         </Head>
+        <Refresh />
         <Component {...pageProps} />
       </RecoilRoot>
     </React.Fragment>
