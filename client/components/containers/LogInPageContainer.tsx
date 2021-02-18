@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useSetRecoilState } from "recoil";
 
 import AnimatedInput from "../reusable/AnimatedInput";
+import AuthButton from "../reusable/AuthButton";
 import userState from "../../state/userState";
 
 const LogInPageContainer: React.FC = () => {
@@ -45,7 +46,7 @@ const LogInPageContainer: React.FC = () => {
         <AnimatedInput text={"username or email address"} margin={30} inputRef={credentialsRef} />
         <AnimatedInput text={"password"} inputType={"password"} margin={5} inputRef={passwordRef} />
         <p className="err-msg" ref={errMsgRef} />
-        <button type={"submit"}>Login</button>
+        <AuthButton text={"Login"} />
       </form>
 
       <style jsx>{`
@@ -60,24 +61,6 @@ const LogInPageContainer: React.FC = () => {
           display: flex;
           flex-direction: column;
           justify-content: center;
-        }
-
-        .login-form-container button {
-          margin-top: 20px;
-          width: 20%;
-          min-width: 100px;
-          height: 45px;
-          padding: 5px 10px;
-          border: none;
-          border-radius: 4px;
-          align-self: flex-end;
-          background: #2ecd71;
-          color: #fff;
-          transition: background 0.5s;
-        }
-
-        .login-form-container button:hover {
-          background: #1d8147;
         }
 
         .err-msg {
