@@ -43,7 +43,7 @@ const Hero: React.FC = () => {
           width: 100vw;
           height: 100vh;
           position: relative;
-          background: #001c91;
+          background: #e2e2e2;
         }
 
         .hero-middle {
@@ -74,15 +74,16 @@ const Hero: React.FC = () => {
 
         .hero-middle-right > h1 {
           font-size: 6vw;
-          color: #fff;
+          color: #00034e;
+          font-weight: 800;
         }
 
         .hero-middle-right > p {
           margin: 40px 0;
           text-align: center;
-          font-weight: 300;
+          font-weight: 0;
           line-height: 1.4em;
-          color: #c6c6c6;
+          color: #6b6b6b;
         }
 
         .hero-middle * {
@@ -115,11 +116,6 @@ const Hero: React.FC = () => {
             transform: translate(-50%, -50%);
             z-index: -1;
             height: 60vh;
-          }
-
-          .hero-middle-right h1,
-          .hero-middle-right p {
-            color: #ff2f2f;
           }
 
           .hero-middle-right h1 {
