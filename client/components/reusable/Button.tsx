@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 interface Props {
   text: string;
@@ -8,6 +9,7 @@ interface Props {
   size: "large" | "medium" | "small";
   textSize: number;
   margin?: number;
+  link?: string;
 }
 
 const Button: React.FC<Props> = ({
@@ -18,6 +20,7 @@ const Button: React.FC<Props> = ({
   textSize,
   buttonHoverColor,
   margin,
+  link,
 }) => {
   const [height, setHeight] = useState<number>();
   const [width, setWidth] = useState<number>();
@@ -40,7 +43,13 @@ const Button: React.FC<Props> = ({
 
   return (
     <React.Fragment>
-      <button>{text}</button>
+      {link ? (
+        <Link href={link}>
+          <button>{text}</button>
+        </Link>
+      ) : (
+        <button>{text}</button>
+      )}
 
       <style jsx>{`
         button {
@@ -54,7 +63,7 @@ const Button: React.FC<Props> = ({
           height: ${height}px;
           width: ${width}px;
           transition: background 0.3s;
-          margin: ${margin ? `${margin}px` : 0};
+          margin: ${margin ? `${margin}` : 0};
         }
 
         button:hover {

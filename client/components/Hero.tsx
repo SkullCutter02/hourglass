@@ -1,6 +1,7 @@
 import React from "react";
+import Link from "next/link";
 
-import Button from "../reusable/Button";
+import Button from "./reusable/Button";
 
 const Hero: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const Hero: React.FC = () => {
                 textSize={1.2}
                 buttonHoverColor={"#0e7c79"}
                 margin={10}
+                link={"/auth/signup"}
               />
               <Button
                 text={"Log In"}
@@ -30,8 +32,9 @@ const Hero: React.FC = () => {
                 textColor={"#451570"}
                 size={"large"}
                 textSize={1.2}
-                buttonHoverColor={"#a2b500"}
+                buttonHoverColor={"#b0c30b"}
                 margin={10}
+                link={"/auth/login"}
               />
             </div>
           </div>
@@ -81,13 +84,10 @@ const Hero: React.FC = () => {
         .hero-middle-right > p {
           margin: 40px 0;
           text-align: center;
-          font-weight: 0;
+          font-weight: 400;
           line-height: 1.4em;
-          color: #6b6b6b;
-        }
-
-        .hero-middle * {
-          font-weight: 500;
+          font-size: 1rem;
+          color: #37375d;
         }
 
         .hero-buttons {
@@ -126,16 +126,6 @@ const Hero: React.FC = () => {
             margin: 10px;
             align-items: center;
           }
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        p {
-          color: #f3f3f3;
         }
       `}</style>
     </React.Fragment>

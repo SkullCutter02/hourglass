@@ -1,6 +1,6 @@
 import React from "react";
 
-import Hero from "../home/Hero";
+import Hero from "../Hero";
 
 const HomePageContainer: React.FC = () => {
   return (
