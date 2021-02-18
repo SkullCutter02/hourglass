@@ -1,7 +1,6 @@
 import React from "react";
-import Link from "next/link";
 
-import Button from "./reusable/Button";
+import ArrowButton from "./reusable/ArrowButton";
 
 const Hero: React.FC = () => {
   return (
@@ -16,24 +15,20 @@ const Hero: React.FC = () => {
               again!
             </p>
             <div className="hero-buttons">
-              <Button
+              <ArrowButton
                 text={"Get Started"}
                 buttonColor={"#319795"}
                 textColor={"#fff"}
-                size={"large"}
-                textSize={1.2}
+                textSize={17}
                 buttonHoverColor={"#0e7c79"}
-                margin={10}
                 link={"/auth/signup"}
               />
-              <Button
+              <ArrowButton
                 text={"Log In"}
                 buttonColor={"#d2d90c"}
                 textColor={"#451570"}
-                size={"large"}
-                textSize={1.2}
+                textSize={17}
                 buttonHoverColor={"#b0c30b"}
-                margin={10}
                 link={"/auth/login"}
               />
             </div>
@@ -95,15 +90,16 @@ const Hero: React.FC = () => {
           display: flex;
           justify-content: space-evenly;
           margin: 30px 0;
+          align-items: center;
         }
 
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: 1000px) {
           .hero-buttons {
             flex-direction: column;
           }
         }
 
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: 570px) {
           .hero-middle {
             width: 80%;
             justify-content: center;
