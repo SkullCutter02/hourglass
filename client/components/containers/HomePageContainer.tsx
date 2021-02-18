@@ -2,7 +2,7 @@ import React from "react";
 
 import Hero from "../home/Hero";
 
-const HomePageContainer = () => {
+const HomePageContainer: React.FC = () => {
   return (
     <React.Fragment>
       <Hero />
