@@ -11,7 +11,7 @@ router.get("/projects", verifyToken(), async (req: Request, res: Response) => {
     const authData: AuthDataType = res.locals.authData;
     const user = await User.findOneOrFail(
       { uuid: authData.uuid },
-      { relations: ["projectMembers", "projectMembers.project"] }
+      { relations: ["projectMembers", "projectMembers.project", "projectMembers.project.categories"] }
     );
     return res.json(user);
   } catch (err) {

@@ -3,14 +3,29 @@ import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { useRecoilValue } from "recoil";
+import { useQuery } from "react-query";
 
 import userState from "../../state/userState";
+import Spinner from "../reusable/Spinner";
 import ArrowButton from "../reusable/ArrowButton";
+import AsideProject from "../AsideProject";
 import logout from "../../utils/logout";
+import { UserProjectsType } from "../../types/UserProjectsType";
 
 const DashboardLayout: React.FC = ({ children }) => {
   const router = useRouter();
   const user = useRecoilValue(userState);
+
+  const fetchUserProjects = async () => {
+    const res = await fetch("/api/users/projects", {
+      credentials: "include",
+    });
+    return await res.json();
+  };
+
+  const { isLoading, isError, error, data } = useQuery<UserProjectsType, Error>("userProjects", () =>
+    fetchUserProjects()
+  );
 
   const logoutFn = async () => {
     await logout(router);
@@ -23,7 +38,22 @@ const DashboardLayout: React.FC = ({ children }) => {
           <div className="aside-above">
             <h2>Hourglass</h2>
           </div>
-          <div className="aside-below"></div>
+          <div className="aside-below">
+            {isLoading ? (
+              <Spinner size={20} />
+            ) : isError ? (
+              <p>Error: {error.message}</p>
+            ) : (
+              <div className="projects">
+                <h2>PROJECTS: </h2>
+                <ul>
+                  {data.projectMembers.map((projectMember) => (
+                    <AsideProject projectMember={projectMember} key={projectMember.uuid} />
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </aside>
         <main className="dashboard-main">
           <div className="main-above">
@@ -52,7 +82,7 @@ const DashboardLayout: React.FC = ({ children }) => {
         }
 
         .dashboard-main {
-          width: 80%;
+          width: 85%;
         }
 
         .main-above {
@@ -84,7 +114,7 @@ const DashboardLayout: React.FC = ({ children }) => {
         }
 
         .dashboard-aside {
-          width: 20%;
+          width: 15%;
           min-width: 180px;
           background: #19202d;
         }
@@ -102,6 +132,25 @@ const DashboardLayout: React.FC = ({ children }) => {
           left: 50%;
           transform: translate(-50%, -50%);
           color: #ececec;
+        }
+
+        .aside-below {
+          position: relative;
+          height: calc(100% - 60px);
+        }
+
+        .projects {
+          height: 100%;
+          padding: 25px;
+        }
+
+        .projects h2 {
+          color: #686f86;
+          font-size: 0.9rem;
+        }
+
+        .projects > ul {
+          margin: 10px 5px;
         }
       `}</style>
     </React.Fragment>
