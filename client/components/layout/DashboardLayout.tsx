@@ -1,6 +1,21 @@
 import React from "react";
+import { useRouter } from "next/router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { useRecoilValue } from "recoil";
+
+import userState from "../../state/userState";
+import ArrowButton from "../reusable/ArrowButton";
+import logout from "../../utils/logout";
 
 const DashboardLayout: React.FC = ({ children }) => {
+  const router = useRouter();
+  const user = useRecoilValue(userState);
+
+  const logoutFn = async () => {
+    await logout(router);
+  };
+
   return (
     <React.Fragment>
       <div className="dashboard">
@@ -11,7 +26,20 @@ const DashboardLayout: React.FC = ({ children }) => {
           <div className="aside-below"></div>
         </aside>
         <main className="dashboard-main">
-          <div className="main-above"></div>
+          <div className="main-above">
+            <div className="user-info">
+              <FontAwesomeIcon icon={faUser} color={"grey"} height={"25px"} />
+              <p>{user && user.username}</p>
+              <ArrowButton
+                text={"Logout"}
+                buttonColor={"#8d8d8d"}
+                buttonHoverColor={"#696969"}
+                textColor={"#fff"}
+                textSize={7}
+                onClick={logoutFn}
+              />
+            </div>
+          </div>
           <div className="main-below">{children}</div>
         </main>
       </div>
@@ -30,6 +58,29 @@ const DashboardLayout: React.FC = ({ children }) => {
         .main-above {
           height: 60px;
           box-shadow: 0 5px 5px #acacac;
+        }
+
+        .user-info {
+          float: right;
+          height: 100%;
+          margin-right: 70px;
+          width: 25%;
+          min-width: 240px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .user-info > div {
+          display: flex;
+          cursor: pointer;
+          border: 1px solid red;
+        }
+
+        .user-info p {
+          margin: 0 10px;
+          color: #808080;
+          cursor: pointer;
         }
 
         .dashboard-aside {
