@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 // minimum 8 characters, at least one uppercase character and one number
-const passwordRegex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
+const passwordRegex = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/);
 
 export const authSignUpSchema = yup.object({
   username: yup
@@ -14,7 +14,7 @@ export const authSignUpSchema = yup.object({
   password: yup
     .string()
     .matches(passwordRegex, {
-      message: "Password must contain at least one uppercase letter and one number",
+      message: "Password must contain at least one uppercase letter, one lowercase letter and one number",
     })
     .required(),
 });
@@ -33,7 +33,7 @@ export const authResetPassSchema = yup.object({
   password: yup
     .string()
     .matches(passwordRegex, {
-      message: "Password must contain at least one uppercase letter and one number",
+      message: "Password must contain at least one uppercase letter, one lowercase letter and one number",
     })
     .required(),
 });

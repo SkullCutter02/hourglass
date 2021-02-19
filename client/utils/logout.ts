@@ -6,7 +6,7 @@ const logout = async (router: NextRouter) => {
       method: "POST",
       credentials: "include",
     });
-    await router.push("/");
+    await router.reload();
   } catch (err) {
     console.log(err);
   }

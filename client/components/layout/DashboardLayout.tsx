@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
+import Link from "next/link";
 
 import userState from "../../state/userState";
 import Spinner from "../reusable/Spinner";
@@ -59,7 +60,9 @@ const DashboardLayout: React.FC = ({ children }) => {
         </div>
         <aside className="dashboard-aside" ref={sidebarRef}>
           <div className="aside-above">
-            <h2>Hourglass</h2>
+            <Link href={"/"}>
+              <h2>Hourglass</h2>
+            </Link>
           </div>
           <div className="aside-below">
             {isLoading ? (
@@ -164,6 +167,7 @@ const DashboardLayout: React.FC = ({ children }) => {
           left: 50%;
           transform: translate(-50%, -50%);
           color: #ececec;
+          cursor: pointer;
         }
 
         .aside-below {
@@ -202,20 +206,20 @@ const DashboardLayout: React.FC = ({ children }) => {
           background: #000000;
           border-radius: 9px;
         }
-        
+
         .active-hamburger span:nth-child(1) {
           transform: translate(0, 7px) rotate(135deg);
         }
-        
-        .active-hamburger span:nth-child(2){
+
+        .active-hamburger span:nth-child(2) {
           opacity: 0;
         }
-        
+
         .active-hamburger span:nth-child(3) {
           transform: translate(0, -7px) rotate(-135deg);
-        } 
+        }
 
-        @media screen and (max-width: 650px) {
+        @media screen and (max-width: 800px) {
           .dashboard-main {
             width: 100%;
           }
@@ -234,7 +238,7 @@ const DashboardLayout: React.FC = ({ children }) => {
           }
 
           .hamburger {
-            display: block; !important;
+            display: block;
           }
         }
       `}</style>

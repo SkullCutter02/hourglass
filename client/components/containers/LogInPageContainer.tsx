@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { useSetRecoilState } from "recoil";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 import AnimatedInput from "../reusable/AnimatedInput";
 import AuthButton from "../reusable/AuthButton";
@@ -48,6 +49,9 @@ const LogInPageContainer: React.FC = () => {
         <h1>Login</h1>
         <AnimatedInput text={"username or email address"} margin={30} inputRef={credentialsRef} />
         <AnimatedInput text={"password"} inputType={"password"} margin={5} inputRef={passwordRef} />
+        <Link href={"/auth/reset"}>
+          <p className="forget-password">Forgot your password?</p>
+        </Link>
         <p className="err-msg" ref={errMsgRef} />
         <AuthButton text={"Login"} />
       </form>
@@ -66,9 +70,17 @@ const LogInPageContainer: React.FC = () => {
           justify-content: center;
         }
 
-        .err-msg {
+        .err-msg,
+        .forget-password {
           margin-top: 20px;
           font-size: 0.85rem;
+        }
+
+        .forget-password {
+          color: #888888;
+          text-decoration: underline;
+          cursor: pointer;
+          align-self: flex-end;
         }
 
         @media screen and (max-width: 800px) {

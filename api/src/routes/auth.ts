@@ -123,9 +123,7 @@ router.post("/forgot", validateSchema(authSendEmailSchema), async (req: Request,
           from: "coolalan2016@gmail.com",
           to: email,
           subject: "Click here to change your password!",
-          html: `<p>Hello! Please click this link to reset your password: ${
-            req.protocol + "://" + req.get("host")
-          }/auth/reset/${uniqueIdentifier} 
+          html: `<p>Hello! Please click this link to reset your password: ${process.env.HOST}/auth/reset/${uniqueIdentifier} 
                   <br><br> This link will expire in 30 minutes so if the link doesn't work, please request a new one</p>`,
         },
         (err: Error, info) => {
@@ -134,7 +132,7 @@ router.post("/forgot", validateSchema(authSendEmailSchema), async (req: Request,
         }
       );
     } else {
-      return res.status(500).json({ msg: "user with such email doesn't exist" });
+      return res.status(500).json({ msg: "User with such email doesn't exist" });
     }
   } catch (err) {
     console.log(err);
