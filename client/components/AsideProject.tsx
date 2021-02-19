@@ -38,13 +38,7 @@ const AsideProject: React.FC<Props> = ({ projectMember }) => {
     <React.Fragment>
       <div className="project-container">
         <div>
-          <div
-            className="icon"
-            onClick={() => {
-              setExpand((prevState) => !prevState);
-              const categoriesNode = document.getElementById("categories") as HTMLUListElement;
-            }}
-          >
+          <div className="icon" onClick={() => setExpand((prevState) => !prevState)}>
             <FontAwesomeIcon
               icon={faCaretRight}
               height={"15px"}

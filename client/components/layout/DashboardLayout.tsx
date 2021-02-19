@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
@@ -16,6 +16,11 @@ const DashboardLayout: React.FC = ({ children }) => {
   const router = useRouter();
   const user = useRecoilValue(userState);
 
+  const [openHamburger, setOpenHamburger] = useState(true);
+
+  const hamburgerRef = useRef<HTMLDivElement>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
   const fetchUserProjects = async () => {
     const res = await fetch("/api/users/projects", {
       credentials: "include",
@@ -31,10 +36,28 @@ const DashboardLayout: React.FC = ({ children }) => {
     await logout(router);
   };
 
+  const toggleHamburger = () => {
+    setOpenHamburger((prevState) => !prevState);
+    console.log(openHamburger);
+
+    if (openHamburger) {
+      hamburgerRef.current.classList.add("active-hamburger");
+      sidebarRef.current.style.transform = "scaleX(1)";
+    } else {
+      hamburgerRef.current.classList.remove("active-hamburger");
+      sidebarRef.current.style.transform = "scaleX(0)";
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="dashboard">
-        <aside className="dashboard-aside">
+        <div className="hamburger" onClick={toggleHamburger} ref={hamburgerRef}>
+          <span />
+          <span />
+          <span />
+        </div>
+        <aside className="dashboard-aside" ref={sidebarRef}>
           <div className="aside-above">
             <h2>Hourglass</h2>
           </div>
@@ -45,6 +68,15 @@ const DashboardLayout: React.FC = ({ children }) => {
               <p>Error: {error.message}</p>
             ) : (
               <div className="projects">
+                <div style={{ marginBottom: "30px" }}>
+                  <ArrowButton
+                    text={"Create new Project"}
+                    buttonColor={"#658aa2"}
+                    buttonHoverColor={"#526c7c"}
+                    textColor={"#fff"}
+                    textSize={8}
+                  />
+                </div>
                 <h2>PROJECTS: </h2>
                 <ul>
                   {data.projectMembers.map((projectMember) => (
@@ -115,7 +147,7 @@ const DashboardLayout: React.FC = ({ children }) => {
 
         .dashboard-aside {
           width: 15%;
-          min-width: 180px;
+          min-width: 210px;
           background: #19202d;
         }
 
@@ -151,6 +183,59 @@ const DashboardLayout: React.FC = ({ children }) => {
 
         .projects > ul {
           margin: 10px 5px;
+        }
+
+        .hamburger {
+          cursor: pointer;
+          z-index: 100;
+          position: absolute;
+          top: 17px;
+          left: 10px;
+          display: none;
+        }
+
+        .hamburger span {
+          display: block;
+          margin: 4px;
+          height: 3px;
+          width: 22px;
+          background: #000000;
+          border-radius: 9px;
+        }
+        
+        .active-hamburger span:nth-child(1) {
+          transform: translate(0, 7px) rotate(135deg);
+        }
+        
+        .active-hamburger span:nth-child(2){
+          opacity: 0;
+        }
+        
+        .active-hamburger span:nth-child(3) {
+          transform: translate(0, -7px) rotate(-135deg);
+        } 
+
+        @media screen and (max-width: 650px) {
+          .dashboard-main {
+            width: 100%;
+          }
+
+          .dashboard-aside {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            height: 100vh;
+            overflow: scroll;
+            opacity: 95%;
+            transform: scaleX(0);
+            transform-origin: 0 50%;
+            transition: all 0.2s;
+          }
+
+          .hamburger {
+            display: block; !important;
+          }
         }
       `}</style>
     </React.Fragment>
