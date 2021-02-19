@@ -1,13 +1,21 @@
-import { AppProps } from "next/app";
 import Head from "next/head";
 import React from "react";
 import { RecoilRoot } from "recoil";
 
 import Refresh from "../components/Refresh";
+import PageWithLayoutType from "../components/layout/PageWithLayoutType";
+import EmptyLayout from "../components/layout/EmptyLayout";
 
 import "../styles.css";
 
-function App({ Component, pageProps }: AppProps) {
+type AppLayoutProps = {
+  Component: PageWithLayoutType;
+  pageProps: any;
+};
+
+function App({ Component, pageProps }: AppLayoutProps) {
+  const Layout = Component.layout || EmptyLayout;
+
   return (
     <React.Fragment>
       <RecoilRoot>
@@ -20,7 +28,9 @@ function App({ Component, pageProps }: AppProps) {
           />
         </Head>
         <Refresh />
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </RecoilRoot>
     </React.Fragment>
   );

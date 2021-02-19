@@ -4,15 +4,3 @@ COPY ./package.json ./
 RUN npm install
 COPY . .
 CMD npm run dev
-#RUN mkdir /build-dir
-#WORKDIR /build-dir
-#COPY package.json /build-dir
-#RUN npm install
-#
-#RUN mkdir -p /usr/src/app
-#WORKDIR /usr/src/app
-#RUN ln -s /build-dir/node_modules node_modules
-#
-#COPY . /usr/src/app
-#
-#CMD npm run dev
