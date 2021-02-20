@@ -11,7 +11,7 @@ interface Props {
 }
 
 const TasksTableHeader: React.FC<Props> = ({ tasks, text }) => {
-  const [selectedOption, setSelectedOption] = useState<OptionTypeBase | OptionTypeBase[] | null>(null);
+  const [selectedOption, setSelectedOption] = useState<OptionTypeBase | null>(null);
 
   return (
     <React.Fragment>
@@ -19,7 +19,7 @@ const TasksTableHeader: React.FC<Props> = ({ tasks, text }) => {
         <h2>{text}</h2>
         <Filter selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
       </div>
-      <TasksTable tasks={tasks} />
+      <TasksTable tasks={tasks} filterType={selectedOption?.value} />
 
       <style jsx>{`
         div {

@@ -3,7 +3,7 @@ import Select from "react-select";
 import { OptionTypeBase, ActionMeta } from "react-select";
 
 interface Props {
-  selectedOption: OptionTypeBase | OptionTypeBase[] | null;
+  selectedOption: OptionTypeBase | null;
   setSelectedOption: (value: any, action: ActionMeta<any>) => void;
   options?: any[];
 }

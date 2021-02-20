@@ -1,13 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { formatDistanceToNow, parseISO, isPast } from "date-fns";
 
 import { TasksType } from "../types/TasksType";
 
+type FilterType = "A-Z" | "Z-A" | "filter" | "nearest due date" | "furthest due date" | undefined;
+
 interface Props {
   tasks: TasksType[];
+  filterType: FilterType;
 }
 
-const TasksTable: React.FC<Props> = ({ tasks }) => {
+const TasksTable: React.FC<Props> = ({ tasks, filterType }) => {
+  const [currentFilter, setCurrentFilter] = useState<FilterType>(filterType);
+
+  useEffect(() => {
+    if (filterType === "filter") {
+      setCurrentFilter(null);
+    } else {
+      setCurrentFilter(filterType);
+    }
+  }, [filterType]);
+
+  const filterItems = (tasks: TasksType[]): TasksType[] => {
+    if (!currentFilter) {
+      return tasks;
+    } else if (currentFilter === "A-Z") {
+      return tasks.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (currentFilter === "Z-A") {
+      return tasks.sort((a, b) => b.name.localeCompare(a.name));
+    } else if (currentFilter === "nearest due date") {
+      return tasks.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+    } else if (currentFilter === "furthest due date") {
+      return tasks.sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime());
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="tasks-container">
@@ -22,7 +49,7 @@ const TasksTable: React.FC<Props> = ({ tasks }) => {
             <p>Due</p>
           </div>
         </div>
-        {tasks.map((task) => (
+        {filterItems(tasks).map((task) => (
           <div className="tasks-grid" key={task.uuid}>
             <div className="tasks-grid-item name">
               <p>{task.name}</p>
