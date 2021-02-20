@@ -29,8 +29,12 @@ const DashboardLayout: React.FC = ({ children }) => {
     return await res.json();
   };
 
-  const { isLoading, isError, error, data } = useQuery<UserProjectsType, Error>("userProjects", () =>
-    fetchUserProjects()
+  const { isLoading, isError, error, data } = useQuery<UserProjectsType, Error>(
+    "userProjects",
+    () => fetchUserProjects(),
+    {
+      cacheTime: 0,
+    }
   );
 
   const logoutFn = async () => {
@@ -80,6 +84,9 @@ const DashboardLayout: React.FC = ({ children }) => {
                     textSize={8}
                   />
                 </div>
+                <Link href={"/dashboard"}>
+                  <h2 style={{ cursor: "pointer", marginBottom: "20px" }}>DASHBOARD</h2>
+                </Link>
                 <h2>PROJECTS: </h2>
                 <ul>
                   {data.projectMembers.map((projectMember) => (
@@ -158,7 +165,7 @@ const DashboardLayout: React.FC = ({ children }) => {
           height: 60px;
           background: #1a6ae3;
           position: relative;
-          box-shadow: 0 5px 5px #000000;
+          box-shadow: -5px 5px 5px #000000;
         }
 
         .aside-above h2 {

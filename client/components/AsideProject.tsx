@@ -44,7 +44,7 @@ const AsideProject: React.FC<Props> = ({ projectMember }) => {
               icon={faCaretRight}
               height={"15px"}
               color={"grey"}
-              style={{ transition: "transform 0.2s" }}
+              style={{ transition: "transform 0.1s" }}
               rotation={expand ? 90 : null}
             />
           </div>
