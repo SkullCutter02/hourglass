@@ -8,6 +8,7 @@ import { TasksType } from "../../types/TasksType";
 import Spinner from "../reusable/Spinner";
 import TasksTable from "../TasksTable";
 import AddButton from "../reusable/AddButton";
+import TasksTableHeader from "../TasksTableHeader";
 
 const IndividualProjectContainer: React.FC = () => {
   const router = useRouter();
@@ -56,12 +57,8 @@ const IndividualProjectContainer: React.FC = () => {
               <AddButton text={"Create New Category"} buttonColor={"#3fb820"} buttonHoverColor={"#207a11"} />
               <AddButton text={"Create New Task"} buttonColor={"#25b2c1"} buttonHoverColor={"#137c7c"} />
             </div>
-            <div className="due-tasks-topbar">
-              <h2>These tasks are due: </h2>
-            </div>
-            <TasksTable tasks={groupTasks(data, true)} />
-            <h2 className="your-tasks">Your tasks: </h2>
-            <TasksTable tasks={groupTasks(data, false)} />
+            <TasksTableHeader tasks={groupTasks(data, true)} text={"These tasks are due: "} />
+            <TasksTableHeader tasks={groupTasks(data, false)} text={"Your tasks: "} />
           </div>
         </div>
       ) : (
@@ -73,32 +70,10 @@ const IndividualProjectContainer: React.FC = () => {
           margin: 30px 60px;
         }
 
-        h2 {
-          font-size: 1.2rem;
-          color: #454545;
-          margin-top: 10px;
-          margin-bottom: 20px;
-        }
-
-        .your-tasks {
-          margin-top: 40px;
-        }
-
         .create-buttons {
           margin-bottom: 15px;
           display: flex;
           justify-content: flex-end;
-        }
-
-        .due-tasks-topbar {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 20px;
-        }
-
-        .due-tasks-topbar h2 {
-          margin: 0;
         }
 
         @media screen and (max-width: 600px) {

@@ -16,3 +16,13 @@ button {
   color: #c60606;
   font-size: 0.85rem;
 }
+
+.filter-select > div {
+  width: 150px;
+}
+
+@media screen and (max-width: 500px) {
+  .filter-select > div {
+    width: 100px;
+  }
+}
