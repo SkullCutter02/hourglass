@@ -3,7 +3,7 @@ import { formatDistanceToNow, parseISO, isPast } from "date-fns";
 
 import { TasksType } from "../types/TasksType";
 
-type FilterType = "A-Z" | "Z-A" | "filter" | "nearest due date" | "furthest due date" | undefined;
+type FilterType = "A-Z" | "Z-A" | "nearest due date" | "furthest due date" | undefined;
 
 interface Props {
   tasks: TasksType[];
@@ -14,11 +14,7 @@ const TasksTable: React.FC<Props> = ({ tasks, filterType }) => {
   const [currentFilter, setCurrentFilter] = useState<FilterType>(filterType);
 
   useEffect(() => {
-    if (filterType === "filter") {
-      setCurrentFilter(null);
-    } else {
-      setCurrentFilter(filterType);
-    }
+    setCurrentFilter(filterType);
   }, [filterType]);
 
   const filterItems = (tasks: TasksType[]): TasksType[] => {
@@ -78,7 +74,7 @@ const TasksTable: React.FC<Props> = ({ tasks, filterType }) => {
         .tasks-grid {
           height: 40px;
           display: grid;
-          grid-template-columns: 2fr 4fr 2fr;
+          grid-template-columns: 3fr 4fr 2fr;
           border-bottom: 0.1px solid #d6d6d6;
         }
 

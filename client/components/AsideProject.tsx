@@ -54,9 +54,12 @@ const AsideProject: React.FC<Props> = ({ projectMember }) => {
         </div>
         <ul className="categories" id="categories">
           {projectMember.project.categories.map((category) => (
-            <li key={category.uuid} className="category">
-              {category.name}
-            </li>
+            <Link
+              href={`/dashboard/project/${projectMember.project.uuid}/category/${category.uuid}`}
+              key={category.uuid}
+            >
+              <li className="category">{category.name}</li>
+            </Link>
           ))}
         </ul>
       </div>

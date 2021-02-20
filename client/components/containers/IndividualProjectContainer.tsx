@@ -6,7 +6,6 @@ import { isPast, parseISO } from "date-fns";
 import { ProjectType } from "../../types/ProjectType";
 import { TasksType } from "../../types/TasksType";
 import Spinner from "../reusable/Spinner";
-import TasksTable from "../TasksTable";
 import AddButton from "../reusable/AddButton";
 import TasksTableHeader from "../TasksTableHeader";
 
@@ -58,7 +57,7 @@ const IndividualProjectContainer: React.FC = () => {
               <AddButton text={"Create New Task"} buttonColor={"#25b2c1"} buttonHoverColor={"#137c7c"} />
             </div>
             <TasksTableHeader tasks={groupTasks(data, true)} text={"These tasks are due: "} />
-            <TasksTableHeader tasks={groupTasks(data, false)} text={"Your tasks: "} />
+            <TasksTableHeader tasks={groupTasks(data, false)} text={"Upcoming tasks: "} />
           </div>
         </div>
       ) : (

@@ -12,7 +12,6 @@ const Filter: React.FC<Props> = ({
   selectedOption,
   setSelectedOption,
   options = [
-    { value: "filter", label: "Filter" },
     { value: "A-Z", label: "A-Z" },
     { value: "Z-A", label: "Z-A" },
     { value: "nearest due date", label: "nearest due date" },

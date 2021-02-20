@@ -19,6 +19,7 @@ button {
 
 .filter-select > div {
   width: 150px;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 500px) {
