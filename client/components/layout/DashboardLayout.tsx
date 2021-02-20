@@ -100,7 +100,7 @@ const DashboardLayout: React.FC = ({ children }) => {
                 buttonColor={"#8d8d8d"}
                 buttonHoverColor={"#696969"}
                 textColor={"#fff"}
-                textSize={7}
+                textSize={8}
                 onClick={logoutFn}
               />
             </div>
@@ -231,7 +231,6 @@ const DashboardLayout: React.FC = ({ children }) => {
             z-index: 1;
             height: 100vh;
             overflow: scroll;
-            opacity: 95%;
             transform: scaleX(0);
             transform-origin: 0 50%;
             transition: all 0.2s;
@@ -239,6 +238,12 @@ const DashboardLayout: React.FC = ({ children }) => {
 
           .hamburger {
             display: block;
+          }
+        }
+
+        @media screen and (max-width: 450px) {
+          .user-info {
+            margin-right: 10px;
           }
         }
       `}</style>

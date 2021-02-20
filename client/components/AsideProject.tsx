@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -47,7 +48,9 @@ const AsideProject: React.FC<Props> = ({ projectMember }) => {
               rotation={expand ? 90 : null}
             />
           </div>
-          <li className="project-name">{projectMember.project.name}</li>
+          <Link href={`/dashboard/project/${projectMember.project.uuid}`}>
+            <li className="project-name">{projectMember.project.name}</li>
+          </Link>
         </div>
         <ul className="categories" id="categories">
           {projectMember.project.categories.map((category) => (

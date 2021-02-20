@@ -73,6 +73,7 @@ router.post(
             description: description ? description : "",
             dueDate,
             adminOnly: adminOnly ? adminOnly : false,
+            notifiedTime,
             category,
           });
 

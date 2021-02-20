@@ -1,6 +1,7 @@
-const isDatePast = (firstDate: Date, secondDate = new Date()) => {
+const isDatePast = (firstDate: Date): boolean => {
   if (!firstDate) return false;
-  return firstDate.toString() < secondDate.toISOString();
+
+  return new Date(firstDate) < new Date(Date.now());
 };
 
 export default isDatePast;
