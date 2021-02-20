@@ -25,9 +25,9 @@ router.get("/invite/:userUuid", verifyToken(), async (req: Request, res: Respons
   }
 });
 
-router.post("/invite/:userUuid", verifyToken(), async (req: Request, res: Response) => {
+router.post("/invite/:username", verifyToken(), async (req: Request, res: Response) => {
   try {
-    const { userUuid } = req.params;
+    const { username } = req.params;
     const projectUuid: string = req.body.projectUuid;
     const authData: AuthDataType = res.locals.authData;
 
@@ -35,16 +35,26 @@ router.post("/invite/:userUuid", verifyToken(), async (req: Request, res: Respon
       { uuid: projectUuid },
       { relations: ["projectMembers", "projectMembers.user"] }
     );
-    const user = await User.findOneOrFail({ uuid: userUuid });
+    const user = await User.findOne({ username });
 
-    const isAdmin = project.projectMembers.some(
-      (projectMember) => projectMember.user.uuid === authData.uuid && projectMember.role === "admin"
-    );
+    if (user) {
+      const isAdmin = project.projectMembers.some(
+        (projectMember) => projectMember.user.uuid === authData.uuid && projectMember.role === "admin"
+      );
 
-    if (isAdmin) {
-      const request = ProjectRequest.create({ project, user });
-      await request.save();
-      return res.json(request);
+      const exists = project.projectMembers.some((projectMember) => projectMember.user.uuid === user.uuid);
+
+      if (!exists) {
+        if (isAdmin) {
+          const request = ProjectRequest.create({ project, user });
+          await request.save();
+          return res.json(request);
+        }
+      } else {
+        return res.status(500).json({ msg: "User is already a member of the group!" });
+      }
+    } else {
+      return res.status(500).json({ msg: "User with such username does not exist" });
     }
   } catch (err) {
     console.log(err);

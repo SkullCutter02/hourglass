@@ -8,6 +8,7 @@ import { TasksType } from "../../types/TasksType";
 import Spinner from "../reusable/Spinner";
 import AddButton from "../reusable/AddButton";
 import TasksTableHeader from "../TasksTableHeader";
+import ViewMembers from "../ViewMembers";
 
 const IndividualProjectContainer: React.FC = () => {
   const router = useRouter();
@@ -52,9 +53,17 @@ const IndividualProjectContainer: React.FC = () => {
       ) : data ? (
         <div className="projects-container">
           <div>
-            <div className="create-buttons">
-              <AddButton text={"Create New Category"} buttonColor={"#3fb820"} buttonHoverColor={"#207a11"} />
-              <AddButton text={"Create New Task"} buttonColor={"#25b2c1"} buttonHoverColor={"#137c7c"} />
+            <div className="project-info">
+              <h1>{data.name}</h1>
+              <div>
+                <ViewMembers project={data} />
+                <AddButton
+                  text={"Create New Category"}
+                  buttonColor={"#3fb820"}
+                  buttonHoverColor={"#207a11"}
+                />
+                <AddButton text={"Create New Task"} buttonColor={"#25b2c1"} buttonHoverColor={"#137c7c"} />
+              </div>
             </div>
             <TasksTableHeader tasks={groupTasks(data, true)} text={"These tasks are due: "} />
             <TasksTableHeader tasks={groupTasks(data, false)} text={"Upcoming tasks: "} />
@@ -69,10 +78,28 @@ const IndividualProjectContainer: React.FC = () => {
           margin: 30px 60px;
         }
 
-        .create-buttons {
+        .project-info {
           margin-bottom: 15px;
           display: flex;
+          justify-content: space-between;
+        }
+
+        .project-info > div {
+          width: 100%;
+          display: flex;
           justify-content: flex-end;
+          align-items: center;
+        }
+
+        @media screen and (max-width: 900px) {
+          .project-info {
+            flex-direction: column;
+          }
+
+          .project-info > div {
+            margin-top: 20px;
+            justify-content: flex-start;
+          }
         }
 
         @media screen and (max-width: 600px) {

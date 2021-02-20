@@ -46,7 +46,7 @@ const AddButton: React.FC<Props> = ({
           color: ${textColor};
           transition: background 0.3s ease;
           font-size: ${textSize}px;
-          margin-right: 20px;
+          margin-left: 20px;
         }
 
         button:hover {

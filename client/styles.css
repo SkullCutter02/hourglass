@@ -27,3 +27,9 @@ button {
     width: 100px;
   }
 }
+
+.success {
+  color: #10cb10;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
