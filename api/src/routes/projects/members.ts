@@ -90,6 +90,25 @@ router.post("/accept/:uuid", verifyToken(), async (req: Request, res: Response) 
   }
 });
 
+router.delete("/decline/:uuid", verifyToken(), async (req: Request, res: Response) => {
+  try {
+    const { uuid } = req.params;
+    const authData: AuthDataType = res.locals.authData;
+
+    const request = await ProjectRequest.findOneOrFail({ uuid }, { relations: ["project", "user"] });
+
+    if (authData.uuid === request.user.uuid) {
+      await request.remove();
+      return res.json({ msg: "Declined project invite" });
+    } else {
+      return res.status(403).json({ msg: "You do not have access to accept this project invite" });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
 router.patch("/leave/:projectUuid", verifyToken(), async (req: Request, res: Response) => {
   try {
     const { projectUuid } = req.params;
