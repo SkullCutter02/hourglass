@@ -1,7 +1,5 @@
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
 import Link from "next/link";
@@ -11,6 +9,7 @@ import Spinner from "../reusable/Spinner";
 import ArrowButton from "../reusable/ArrowButton";
 import AsideProject from "../AsideProject";
 import logout from "../../utils/logout";
+import Notification from "../Notification";
 import { UserProjectsType } from "../../types/UserProjectsType";
 
 const DashboardLayout: React.FC = ({ children }) => {
@@ -73,7 +72,7 @@ const DashboardLayout: React.FC = ({ children }) => {
               <Spinner size={20} />
             ) : isError ? (
               <p>Error: {error.message}</p>
-            ) : (
+            ) : user ? (
               <div className="projects">
                 <div style={{ marginBottom: "30px" }}>
                   <ArrowButton
@@ -94,14 +93,14 @@ const DashboardLayout: React.FC = ({ children }) => {
                   ))}
                 </ul>
               </div>
-            )}
+            ) : null}
           </div>
         </aside>
         <main className="dashboard-main">
           <div className="main-above">
             <div className="user-info">
-              <FontAwesomeIcon icon={faUser} color={"grey"} height={"25px"} />
-              <p>{user && user.username}</p>
+              <Notification />
+              <p>{user?.username}</p>
               <ArrowButton
                 text={"Logout"}
                 buttonColor={"#8d8d8d"}
@@ -141,12 +140,6 @@ const DashboardLayout: React.FC = ({ children }) => {
           display: flex;
           align-items: center;
           justify-content: center;
-        }
-
-        .user-info > div {
-          display: flex;
-          cursor: pointer;
-          border: 1px solid red;
         }
 
         .user-info p {

@@ -29,8 +29,8 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
     }
   }, [project]);
 
-  const togglePopup = () => {
-    if (popupRef.current.style.display === "none") {
+  const togglePopup = (blur: boolean) => {
+    if (popupRef.current.style.display === "none" && !blur) {
       popupRef.current.style.display = "block";
     } else {
       popupRef.current.style.display = "none";
@@ -82,7 +82,12 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
   return (
     <React.Fragment>
       <div className="container">
-        <button className="view-members-main-btn" onClick={togglePopup}>
+        <button
+          className="view-members-main-btn"
+          onClick={() => togglePopup(false)}
+          onBlur={() => togglePopup(true)}
+          tabIndex={1}
+        >
           Members
         </button>
         <div className="popup" style={{ display: "none" }} ref={popupRef}>

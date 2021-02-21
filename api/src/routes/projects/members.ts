@@ -10,12 +10,12 @@ import client from "../../utils/redisClient";
 
 const router = Router();
 
-router.get("/invite/:userUuid", verifyToken(), async (req: Request, res: Response) => {
+router.get("/invite", verifyToken(), async (req: Request, res: Response) => {
   try {
-    const { userUuid: uuid } = req.params;
+    const authData: AuthDataType = res.locals.authData;
 
     const user = await User.findOneOrFail(
-      { uuid },
+      { uuid: authData.uuid },
       { relations: ["projectRequests", "projectRequests.project"] }
     );
     return res.json(user);
