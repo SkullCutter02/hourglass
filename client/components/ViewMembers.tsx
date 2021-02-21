@@ -127,7 +127,7 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
               </div>
             </div>
           ))}
-          <div className="project-user-info">
+          <div className="project-user-info" style={{ display: isAdmin ? "flex" : "none" }}>
             <p className="invite" onClick={toggleForm}>
               Invite Member
             </p>
