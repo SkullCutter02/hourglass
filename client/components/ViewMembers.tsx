@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
+import { useQueryClient } from "react-query";
 
 import { ProjectType } from "../types/ProjectType";
 import userState from "../state/userState";
@@ -18,6 +19,7 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
   const successRef = useRef<HTMLDivElement>(null);
 
   const user = useRecoilValue(userState);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (project && user) {
@@ -79,6 +81,22 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
     }
   };
 
+  const kickMember = async (uuid: string) => {
+    const res = await fetch(`/api/projects/members/kick/${uuid}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        projectUuid: project.uuid,
+      }),
+    });
+
+    if (res.ok) {
+      await queryClient.prefetchQuery(`project_${project.uuid}`);
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="container">
@@ -98,7 +116,9 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
                 {projectMember.role === "admin" ? (
                   <p style={{ color: "#808080" }}>(admin)</p>
                 ) : isAdmin ? (
-                  <p className="kick">kick</p>
+                  <p className="kick" onClick={() => kickMember(projectMember.user.uuid)}>
+                    kick
+                  </p>
                 ) : null}
               </div>
             </div>
