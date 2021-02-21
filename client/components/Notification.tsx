@@ -52,7 +52,23 @@ const Notification: React.FC = () => {
     }
   };
 
-  const decline = (uuid: string) => {};
+  const decline = async (uuid: string) => {
+    const res = await fetch(`/api/projects/members/decline/${uuid}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      if (data.msg) {
+        errMsgRef.current.textContent = data.msg;
+      } else {
+        errMsgRef.current.textContent = "Something went wrong";
+      }
+    } else {
+      errMsgRef.current.textContent = "";
+      await queryClient.prefetchQuery("userInvites");
+    }
+  };
 
   return (
     <React.Fragment>
