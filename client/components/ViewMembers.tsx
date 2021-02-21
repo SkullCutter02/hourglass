@@ -86,7 +86,7 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
           className="view-members-main-btn"
           onClick={() => togglePopup(false)}
           onBlur={() => togglePopup(true)}
-          tabIndex={1}
+          tabIndex={0}
         >
           Members
         </button>

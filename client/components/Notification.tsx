@@ -1,13 +1,16 @@
 import React, { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 import { InviteType } from "../types/InviteType";
 import Spinner from "./reusable/Spinner";
 
 const Notification: React.FC = () => {
   const popupRef = useRef<HTMLDivElement>(null);
+  const errMsgRef = useRef<HTMLParagraphElement>(null);
+
+  const queryClient = useQueryClient();
 
   const fetchUserInvites = async () => {
     const res = await fetch(`/api/projects/members/invite`);
@@ -29,6 +32,27 @@ const Notification: React.FC = () => {
       popupRef.current.style.display = "none";
     }
   };
+
+  const accept = async (uuid: string) => {
+    const res = await fetch(`/api/projects/members/accept/${uuid}`, {
+      method: "POST",
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      if (data.msg) {
+        errMsgRef.current.textContent = data.msg;
+      } else {
+        errMsgRef.current.textContent = "Something went wrong";
+      }
+    } else {
+      errMsgRef.current.textContent = "";
+      await queryClient.prefetchQuery("userInvites");
+      await queryClient.prefetchQuery("userProjects");
+    }
+  };
+
+  const decline = (uuid: string) => {};
 
   return (
     <React.Fragment>
@@ -55,9 +79,10 @@ const Notification: React.FC = () => {
                 <div className="request-container" key={projectRequest.uuid}>
                   <p>You are invited to join the project: {projectRequest.project.name}</p>
                   <span>
-                    <p>Accept</p>
-                    <p>Decline</p>
+                    <p onClick={() => accept(projectRequest.uuid)}>Accept</p>
+                    <p onClick={() => decline(projectRequest.uuid)}>Decline</p>
                   </span>
+                  <p className="err-msg" ref={errMsgRef} style={{ marginTop: "5px" }} />
                 </div>
               ))}
             </React.Fragment>
@@ -93,11 +118,13 @@ const Notification: React.FC = () => {
           padding: 10px 15px;
           cursor: initial;
           min-height: 50px;
+          opacity: 95%;
         }
 
         .popup p {
           font-size: 0.7rem;
           word-wrap: break-word;
+          line-height: 1.3em;
         }
 
         .request-container {
