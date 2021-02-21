@@ -46,9 +46,17 @@ router.post("/invite/:username", verifyToken(), async (req: Request, res: Respon
 
       if (!exists) {
         if (isAdmin) {
-          const request = ProjectRequest.create({ project, user });
-          await request.save();
-          return res.json(request);
+          const findRequest = await ProjectRequest.findOne({ project, user });
+
+          if (!findRequest) {
+            const request = ProjectRequest.create({ project, user });
+            await request.save();
+            return res.json(request);
+          } else {
+            return res.status(500).json({ msg: "You already sent an invite to this user" });
+          }
+        } else {
+          return res.status(403).json({ msg: "You do not have access to invite a user" });
         }
       } else {
         return res.status(500).json({ msg: "User is already a member of the group!" });

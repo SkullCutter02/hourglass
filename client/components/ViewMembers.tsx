@@ -82,18 +82,22 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
   };
 
   const kickMember = async (uuid: string) => {
-    const res = await fetch(`/api/projects/members/kick/${uuid}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        projectUuid: project.uuid,
-      }),
-    });
+    const confirm = window.confirm("Are you sure you want to kick this user out of this project?");
 
-    if (res.ok) {
-      await queryClient.prefetchQuery(`project_${project.uuid}`);
+    if (confirm) {
+      const res = await fetch(`/api/projects/members/kick/${uuid}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          projectUuid: project.uuid,
+        }),
+      });
+
+      if (res.ok) {
+        await queryClient.prefetchQuery(`project_${project.uuid}`);
+      }
     }
   };
 
