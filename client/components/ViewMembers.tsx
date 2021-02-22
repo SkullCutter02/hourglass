@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { useQueryClient } from "react-query";
+import { useRouter } from "next/router";
 
 import { ProjectType } from "../types/ProjectType";
 import userState from "../state/userState";
@@ -20,6 +21,7 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
 
   const user = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   useEffect(() => {
     if (project && user) {
@@ -101,15 +103,25 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
     }
   };
 
+  const leaveProject = async () => {
+    const confirm = window.confirm("Are you sure you want to leave this project?");
+
+    if (confirm) {
+      const res = await fetch(`/api/projects/members/leave/${project.uuid}`, {
+        method: "PATCH",
+      });
+
+      if (res.ok) {
+        await queryClient.prefetchQuery("userProjects");
+        await router.push("/dashboard");
+      }
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="container">
-        <button
-          className="view-members-main-btn"
-          onClick={() => togglePopup(false)}
-          onBlur={() => togglePopup(true)}
-          tabIndex={0}
-        >
+        <button className="view-members-main-btn" onClick={() => togglePopup(false)} tabIndex={0}>
           Members
         </button>
         <div className="popup" style={{ display: "none" }} ref={popupRef}>
@@ -127,6 +139,11 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
               </div>
             </div>
           ))}
+          <div className="project-user-info">
+            <p className="leave" onClick={leaveProject} style={{ color: "#cd0c0c", fontSize: "0.7rem" }}>
+              Leave Project
+            </p>
+          </div>
           <div className="project-user-info" style={{ display: isAdmin ? "flex" : "none" }}>
             <p className="invite" onClick={toggleForm}>
               Invite Member
@@ -216,7 +233,8 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
           color: #c30808;
         }
 
-        .invite {
+        .invite,
+        .leave {
           width: 100% !important;
           text-decoration: underline;
           cursor: pointer;
