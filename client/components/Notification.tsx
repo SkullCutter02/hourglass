@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { useQuery, useQueryClient } from "react-query";
+import { useRouter } from "next/router";
 
 import { InviteType } from "../types/InviteType";
 import Spinner from "./reusable/Spinner";
@@ -11,6 +12,7 @@ const Notification: React.FC = () => {
   const errMsgRef = useRef<HTMLParagraphElement>(null);
 
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const fetchUserInvites = async () => {
     const res = await fetch(`/api/projects/members/invite`);
@@ -45,6 +47,7 @@ const Notification: React.FC = () => {
       errMsgRef.current.textContent = "";
       await queryClient.prefetchQuery("userInvites");
       await queryClient.prefetchQuery("userProjects");
+      await router.push(`/dashboard/project/${data.project.uuid}`);
     }
   };
 
