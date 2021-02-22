@@ -4,34 +4,36 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
-  link?: string;
   text: string;
   buttonColor: string;
   buttonHoverColor: string;
   textColor?: string;
   textSize?: number;
   iconSize?: number;
+  onClick?: () => void;
+  link?: string;
 }
 
 const AddButton: React.FC<Props> = ({
-  link,
   text,
   buttonColor,
   buttonHoverColor,
   textColor = "#fff",
   textSize = 10,
   iconSize = 10,
+  onClick,
+  link,
 }) => {
   return (
     <React.Fragment>
       {link ? (
         <Link href={link}>
-          <button>
+          <button onClick={onClick}>
             <FontAwesomeIcon icon={faPlus} height={iconSize} /> {text}
           </button>
         </Link>
       ) : (
-        <button>
+        <button onClick={onClick}>
           <FontAwesomeIcon icon={faPlus} height={iconSize} /> {text}
         </button>
       )}

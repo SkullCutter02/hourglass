@@ -11,17 +11,15 @@ const IndividualCategoryContainer: React.FC = () => {
   const { categoryUuid } = router.query;
 
   const fetchTasks = async () => {
-    if (categoryUuid) {
-      const res = await fetch(`/api/tasks/category/${categoryUuid}`);
-      return await res.json();
-    }
+    const res = await fetch(`/api/tasks/category/${categoryUuid}`);
+    return await res.json();
   };
 
   const { isLoading, isError, error, data } = useQuery<CategoryType, Error>(
     `category_${categoryUuid}`,
     () => fetchTasks(),
     {
-      cacheTime: 0,
+      enabled: !!categoryUuid,
     }
   );
 
@@ -33,7 +31,7 @@ const IndividualCategoryContainer: React.FC = () => {
         <div>{error.message}</div>
       ) : data ? (
         <div className="category-container">
-          <TasksTableHeader tasks={data.tasks} text={data.name.toUpperCase()} />
+          <TasksTableHeader tasks={data.tasks} text={data.name.toUpperCase()} color={data.color} />
         </div>
       ) : (
         <Spinner size={40} />

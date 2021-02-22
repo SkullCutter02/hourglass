@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
@@ -21,6 +21,17 @@ const DashboardLayout: React.FC = ({ children }) => {
   const hamburgerRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    fetch("/api/auth/access")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.access) {
+          router.back();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   const fetchUserProjects = async () => {
     const res = await fetch("/api/users/projects", {
       credentials: "include",
@@ -28,12 +39,8 @@ const DashboardLayout: React.FC = ({ children }) => {
     return await res.json();
   };
 
-  const { isLoading, isError, error, data } = useQuery<UserProjectsType, Error>(
-    "userProjects",
-    () => fetchUserProjects(),
-    {
-      cacheTime: 0,
-    }
+  const { isLoading, isError, error, data } = useQuery<UserProjectsType, Error>("userProjects", () =>
+    fetchUserProjects()
   );
 
   const logoutFn = async () => {
@@ -42,7 +49,6 @@ const DashboardLayout: React.FC = ({ children }) => {
 
   const toggleHamburger = () => {
     setOpenHamburger((prevState) => !prevState);
-    console.log(openHamburger);
 
     if (openHamburger) {
       hamburgerRef.current.classList.add("active-hamburger");
@@ -72,7 +78,7 @@ const DashboardLayout: React.FC = ({ children }) => {
               <Spinner size={20} />
             ) : isError ? (
               <p>Error: {error.message}</p>
-            ) : user ? (
+            ) : data ? (
               <div className="projects">
                 <div style={{ marginBottom: "30px" }}>
                   <ArrowButton
@@ -84,7 +90,9 @@ const DashboardLayout: React.FC = ({ children }) => {
                   />
                 </div>
                 <Link href={"/dashboard"}>
-                  <h2 style={{ cursor: "pointer", marginBottom: "20px" }}>DASHBOARD</h2>
+                  <h2 style={{ cursor: "pointer", marginBottom: "20px", textDecoration: "underline" }}>
+                    DASHBOARD
+                  </h2>
                 </Link>
                 <h2>PROJECTS: </h2>
                 <ul>

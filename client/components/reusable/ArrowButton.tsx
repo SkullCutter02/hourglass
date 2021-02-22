@@ -9,6 +9,7 @@ interface Props {
   textSize: number;
   link?: string;
   onClick?: () => void;
+  type?: "button" | "submit" | "reset";
 }
 
 const ArrowButton: React.FC<Props> = ({
@@ -19,18 +20,19 @@ const ArrowButton: React.FC<Props> = ({
   buttonHoverColor,
   link,
   onClick,
+  type = "button",
 }) => {
   return (
     <React.Fragment>
       {link ? (
         <Link href={link}>
-          <button className="arrow-button" onClick={onClick}>
+          <button className="arrow-button" onClick={onClick} type={type}>
             {text}
             <span className="arrow" />
           </button>
         </Link>
       ) : (
-        <button className="arrow-button" onClick={onClick}>
+        <button className="arrow-button" onClick={onClick} type={type}>
           {text}
           <span className="arrow" />
         </button>

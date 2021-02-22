@@ -96,7 +96,7 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
       });
 
       if (res.ok) {
-        await queryClient.prefetchQuery(`project_${project.uuid}`);
+        await queryClient.prefetchQuery(["project", project.uuid]);
       }
     }
   };
@@ -172,7 +172,7 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
         }
 
         .popup {
-          width: calc(100% + 100px);
+          width: calc(100% + 120px);
           position: absolute;
           top: 3em;
           left: 0;

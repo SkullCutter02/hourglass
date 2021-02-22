@@ -22,8 +22,8 @@ function App({ Component, pageProps }: AppLayoutProps) {
 
   return (
     <React.Fragment>
-      <RecoilRoot>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <RecoilRoot>
           <Head>
             <title>Hourglass</title>
             <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -37,8 +37,8 @@ function App({ Component, pageProps }: AppLayoutProps) {
             <Component {...pageProps} />
           </Layout>
           <ReactQueryDevtools />
-        </QueryClientProvider>
-      </RecoilRoot>
+        </RecoilRoot>
+      </QueryClientProvider>
     </React.Fragment>
   );
 }

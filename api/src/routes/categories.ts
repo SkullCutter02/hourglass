@@ -59,7 +59,7 @@ router.post(
         } else {
           return res
             .status(500)
-            .json({ msg: "A category with such name of color already exists within project" });
+            .json({ msg: "A category with such name or color already exists within project" });
         }
       } else {
         return res.status(403).json({ msg: "You do not have access to add a category to this project" });

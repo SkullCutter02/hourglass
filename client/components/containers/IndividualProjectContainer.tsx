@@ -15,17 +15,15 @@ const IndividualProjectContainer: React.FC = () => {
   const { uuid } = router.query;
 
   const fetchProject = async () => {
-    if (uuid) {
-      const res = await fetch(`/api/projects/${uuid}`);
-      return await res.json();
-    }
+    const res = await fetch(`/api/projects/${uuid}`);
+    return await res.json();
   };
 
   const { isLoading, isError, error, data } = useQuery<ProjectType, Error>(
-    `project_${uuid}`,
+    ["project", uuid],
     () => fetchProject(),
     {
-      cacheTime: 0,
+      enabled: !!uuid,
     }
   );
 
@@ -44,6 +42,14 @@ const IndividualProjectContainer: React.FC = () => {
     });
   };
 
+  function createTask() {
+    if (data.categories.length === 0) {
+      alert("You need to create a category first in order to create a task");
+    } else {
+      // TODO: router.push
+    }
+  }
+
   return (
     <React.Fragment>
       {isLoading ? (
@@ -61,8 +67,14 @@ const IndividualProjectContainer: React.FC = () => {
                   text={"Create New Category"}
                   buttonColor={"#3fb820"}
                   buttonHoverColor={"#207a11"}
+                  link={`/dashboard/project/${data.uuid}/create/category`}
                 />
-                <AddButton text={"Create New Task"} buttonColor={"#25b2c1"} buttonHoverColor={"#137c7c"} />
+                <AddButton
+                  text={"Create New Task"}
+                  buttonColor={"#25b2c1"}
+                  buttonHoverColor={"#137c7c"}
+                  onClick={() => createTask()}
+                />
               </div>
             </div>
             <TasksTableHeader tasks={groupTasks(data, true)} text={"These tasks are due: "} />

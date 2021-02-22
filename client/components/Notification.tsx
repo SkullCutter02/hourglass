@@ -17,12 +17,8 @@ const Notification: React.FC = () => {
     return await res.json();
   };
 
-  const { isLoading, isError, error, data } = useQuery<InviteType, Error>(
-    "userInvites",
-    () => fetchUserInvites(),
-    {
-      cacheTime: 0,
-    }
+  const { isLoading, isError, error, data } = useQuery<InviteType, Error>("userInvites", () =>
+    fetchUserInvites()
   );
 
   const togglePopup = (blur: boolean) => {
