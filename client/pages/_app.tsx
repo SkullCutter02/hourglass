@@ -1,7 +1,8 @@
+import React, { useRef } from "react";
 import Head from "next/head";
-import React from "react";
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Hydrate } from "react-query/hydration";
 import { ReactQueryDevtools } from "react-query/devtools";
 
 import Refresh from "../components/Refresh";
@@ -18,26 +19,32 @@ type AppLayoutProps = {
 
 function App({ Component, pageProps }: AppLayoutProps) {
   const Layout = Component.layout || EmptyLayout;
-  const queryClient = new QueryClient();
+
+  const queryClientRef = useRef<QueryClient>(null);
+  if (!queryClientRef.current) {
+    queryClientRef.current = new QueryClient();
+  }
 
   return (
     <React.Fragment>
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <Head>
-            <title>Hourglass</title>
-            <link rel="preconnect" href="https://fonts.gstatic.com" />
-            <link
-              href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-              rel="stylesheet"
-            />
-          </Head>
-          <Refresh />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-          <ReactQueryDevtools />
-        </RecoilRoot>
+      <QueryClientProvider client={queryClientRef.current}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <RecoilRoot>
+            <Head>
+              <title>Hourglass</title>
+              <link rel="preconnect" href="https://fonts.gstatic.com" />
+              <link
+                href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+                rel="stylesheet"
+              />
+            </Head>
+            <Refresh />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+            <ReactQueryDevtools />
+          </RecoilRoot>
+        </Hydrate>
       </QueryClientProvider>
     </React.Fragment>
   );
