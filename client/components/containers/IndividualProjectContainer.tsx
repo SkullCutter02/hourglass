@@ -77,6 +77,7 @@ const IndividualProjectContainer: React.FC = () => {
                 />
               </div>
             </div>
+            {data.description && <p className="description">{data.description}</p>}
             <TasksTableHeader tasks={groupTasks(data, true)} text={"These tasks are due: "} />
             <TasksTableHeader tasks={groupTasks(data, false)} text={"Upcoming tasks: "} />
           </div>
@@ -88,6 +89,11 @@ const IndividualProjectContainer: React.FC = () => {
       <style jsx>{`
         .projects-container > div {
           margin: 30px 60px;
+        }
+
+        .description {
+          margin-top: 5px;
+          font-size: 0.9rem;
         }
 
         .project-info {

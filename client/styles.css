@@ -1,3 +1,7 @@
+:root {
+  --font-family: "Inter", Calibre, "San Francisco", "SF Pro Text", -apple-system, system-ui, sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,7 +9,27 @@
 }
 
 body {
-  font-family: "Inter", Calibre, "San Francisco", "SF Pro Text", -apple-system, system-ui, sans-serif;
+  font-family: var(--font-family);
+}
+
+textarea {
+  font-family: var(--font-family);
+}
+
+textarea::-webkit-input-placeholder {
+  font-family: var(--font-family);
+}
+
+textarea:-ms-input-placeholder {
+  font-family: var(--font-family);
+}
+
+textarea:-moz-placeholder {
+  font-family: var(--font-family);
+}
+
+textarea::-moz-placeholder {
+  font-family: var(--font-family);
 }
 
 button {

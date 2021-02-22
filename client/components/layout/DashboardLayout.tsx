@@ -81,13 +81,15 @@ const DashboardLayout: React.FC = ({ children }) => {
             ) : data ? (
               <div className="projects">
                 <div style={{ marginBottom: "30px" }}>
-                  <ArrowButton
-                    text={"Create new Project"}
-                    buttonColor={"#658aa2"}
-                    buttonHoverColor={"#526c7c"}
-                    textColor={"#fff"}
-                    textSize={8}
-                  />
+                  <Link href={"/dashboard/project/create"}>
+                    <ArrowButton
+                      text={"Create new Project"}
+                      buttonColor={"#658aa2"}
+                      buttonHoverColor={"#526c7c"}
+                      textColor={"#fff"}
+                      textSize={8}
+                    />
+                  </Link>
                 </div>
                 <Link href={"/dashboard"}>
                   <h2 style={{ cursor: "pointer", marginBottom: "20px", textDecoration: "underline" }}>

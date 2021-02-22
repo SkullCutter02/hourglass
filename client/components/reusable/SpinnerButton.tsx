@@ -49,6 +49,10 @@ const SpinnerButton: React.FC<Props> = ({
         button:hover {
           background: ${buttonHoverColor};
         }
+
+        div {
+          position: relative;
+        }
       `}</style>
     </React.Fragment>
   );
