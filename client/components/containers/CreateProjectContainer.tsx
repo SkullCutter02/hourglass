@@ -44,6 +44,7 @@ const CreateProjectContainer: React.FC = () => {
   return (
     <React.Fragment>
       <form className="create-project-form" onSubmit={createProject}>
+        <h2>Create Project</h2>
         <RegularInput placeholder={"Project name: "} name={"name"} />
         <RegularTextArea
           name={"description"}
@@ -65,6 +66,10 @@ const CreateProjectContainer: React.FC = () => {
       </form>
 
       <style jsx>{`
+        h2 {
+          margin-bottom: 20px;
+        }
+
         .create-project-form {
           margin: 90px auto;
           width: 45%;
@@ -74,6 +79,18 @@ const CreateProjectContainer: React.FC = () => {
         .submit {
           margin-top: 10px;
           float: right;
+        }
+
+        @media screen and (max-width: 800px) {
+          .create-project-form {
+            width: 65%;
+          }
+        }
+
+        @media screen and (max-width: 550px) {
+          .create-project-form {
+            width: 75%;
+          }
         }
       `}</style>
     </React.Fragment>

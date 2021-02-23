@@ -13,6 +13,17 @@ import isDatePast from "../utils/isDatePast";
 
 const router = Router();
 
+router.get("/:uuid", async (req: Request, res: Response) => {
+  try {
+    const { uuid } = req.params;
+    const task = await Task.findOneOrFail({ uuid }, { relations: ["category"] });
+    return res.json(task);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
 router.get("/category/:categoryUuid", async (req: Request, res: Response) => {
   try {
     const category = await Category.findOneOrFail(

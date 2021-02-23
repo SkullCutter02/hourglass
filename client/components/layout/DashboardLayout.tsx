@@ -229,7 +229,7 @@ const DashboardLayout: React.FC = ({ children }) => {
           transform: translate(0, -7px) rotate(-135deg);
         }
 
-        @media screen and (max-width: 800px) {
+        @media screen and (max-width: 850px) {
           .dashboard-main {
             width: 100%;
           }
