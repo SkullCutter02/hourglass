@@ -55,12 +55,6 @@ const Task: React.FC<Props> = ({ task }) => {
         .expanded-tasks-grid .actual-date {
           display: block;
         }
-
-        @media screen and (max-width: 800px) {
-          .tasks-grid-item {
-            min-width: 220px;
-          }
-        }
       `}</style>
     </React.Fragment>
   );

@@ -88,7 +88,7 @@ const IndividualProjectContainer: React.FC = () => {
 
       <style jsx>{`
         .projects-container > div {
-          margin: 30px 60px;
+          padding: 30px 50px;
         }
 
         .description {
@@ -120,15 +120,9 @@ const IndividualProjectContainer: React.FC = () => {
           }
         }
 
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 500px) {
           .projects-container > div {
-            margin: 30px 40px;
-          }
-        }
-
-        @media screen and (max-width: 400px) {
-          .projects-container > div {
-            margin: 30px 20px;
+            padding: 30px;
           }
         }
       `}</style>
