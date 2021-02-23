@@ -30,8 +30,8 @@ const SignUpPageContainer: React.FC = () => {
           },
           credentials: "include",
           body: JSON.stringify({
-            username: usernameRef.current.value,
-            email: emailRef.current.value,
+            username: usernameRef.current.value.toLowerCase(),
+            email: emailRef.current.value.toLowerCase(),
             password: passwordRef.current.value,
           }),
         });

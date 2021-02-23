@@ -65,10 +65,6 @@ button {
   padding: 10px 0;
 }
 
-.tasks-grid-data {
-  cursor: pointer;
-}
-
 .tasks-grid-item {
   display: flex;
   flex-direction: column;

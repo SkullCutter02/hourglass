@@ -26,7 +26,7 @@ const LogInPageContainer: React.FC = () => {
         },
         credentials: "include",
         body: JSON.stringify({
-          credentials: credentialsRef.current.value,
+          credentials: credentialsRef.current.value.toLowerCase(),
           password: passwordRef.current.value,
         }),
       });

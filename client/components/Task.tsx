@@ -14,16 +14,14 @@ const Task: React.FC<Props> = ({ task }) => {
 
   return (
     <React.Fragment>
-      <div
-        className={`tasks-grid tasks-grid-data ${expand ? "expanded-tasks-grid" : ""}`}
-        onClick={() => setExpand((prevState) => !prevState)}
-      >
+      <div className={`tasks-grid ${expand ? "expanded-tasks-grid" : ""}`}>
         <div className="tasks-grid-item">
           <p>
             <FontAwesomeIcon
               icon={faCaretRight}
-              style={{ marginRight: "10px", transition: "transform 0.1s" }}
               rotation={expand ? 90 : null}
+              onClick={() => setExpand((prevState) => !prevState)}
+              style={{ marginRight: "10px", transition: "transform 0.1s", cursor: "pointer" }}
             />
             {task.name}
           </p>
