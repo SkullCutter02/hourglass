@@ -11,6 +11,8 @@ import AsideProject from "../AsideProject";
 import logout from "../../utils/logout";
 import Notification from "../Notification";
 import { UserProjectsType } from "../../types/UserProjectsType";
+import { useOutsideClick } from "../../utils/useOutsideClick";
+import { useWindowWidth } from "../../utils/useWindowWidth";
 
 const DashboardLayout: React.FC = ({ children }) => {
   const router = useRouter();
@@ -18,8 +20,26 @@ const DashboardLayout: React.FC = ({ children }) => {
 
   const [openHamburger, setOpenHamburger] = useState(true);
 
+  const windowWidth = useWindowWidth();
+
   const hamburgerRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const toggleHamburger = (source: "hamburger" | "outside") => {
+    if (windowWidth <= 850) {
+      setOpenHamburger((prevState) => !prevState);
+
+      if (openHamburger && source === "hamburger") {
+        hamburgerRef.current.classList.add("active-hamburger");
+        sidebarRef.current.style.transform = "scaleX(1)";
+      } else {
+        hamburgerRef.current.classList.remove("active-hamburger");
+        sidebarRef.current.style.transform = "scaleX(0)";
+      }
+    }
+  };
+
+  useOutsideClick(() => toggleHamburger("outside"), hamburgerRef, sidebarRef);
 
   useEffect(() => {
     fetch("/api/auth/access")
@@ -47,22 +67,10 @@ const DashboardLayout: React.FC = ({ children }) => {
     await logout(router);
   };
 
-  const toggleHamburger = () => {
-    setOpenHamburger((prevState) => !prevState);
-
-    if (openHamburger) {
-      hamburgerRef.current.classList.add("active-hamburger");
-      sidebarRef.current.style.transform = "scaleX(1)";
-    } else {
-      hamburgerRef.current.classList.remove("active-hamburger");
-      sidebarRef.current.style.transform = "scaleX(0)";
-    }
-  };
-
   return (
     <React.Fragment>
       <div className="dashboard">
-        <div className="hamburger" onClick={toggleHamburger} ref={hamburgerRef}>
+        <div className="hamburger" onClick={() => toggleHamburger("hamburger")} ref={hamburgerRef}>
           <span />
           <span />
           <span />

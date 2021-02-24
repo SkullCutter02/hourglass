@@ -74,6 +74,7 @@ const IndividualProjectContainer: React.FC = () => {
                   buttonColor={"#25b2c1"}
                   buttonHoverColor={"#137c7c"}
                   onClick={() => createTask()}
+                  link={`/dashboard/project/${data.uuid}/create/task`}
                 />
               </div>
             </div>
