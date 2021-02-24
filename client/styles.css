@@ -74,6 +74,12 @@ button {
   min-width: 180px;
 }
 
+@media screen and (max-width: 600px) {
+  .tasks-grid-item {
+    min-width: 220px;
+  }
+}
+
 .tasks-grid-item > p {
   margin-left: 20px;
   display: block;

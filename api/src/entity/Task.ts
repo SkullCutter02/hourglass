@@ -15,7 +15,7 @@ export default class Task extends Model {
   dueDate: Date;
 
   @Column()
-  notifiedTime: number; // in minutes
+  notifiedTime: Date;
 
   @Column({ default: false })
   adminOnly: boolean;

@@ -29,8 +29,8 @@ export type ProjectType = {
       updatedAt: Date;
       name: string;
       description: string;
-      dueDate: string; // date format
-      notifiedTime: number;
+      dueDate: string;
+      notifiedTime: Date;
       adminOnly: boolean;
     }[];
   }[];

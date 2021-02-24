@@ -4,7 +4,7 @@ export const postTaskSchema = yup.object({
   name: yup.string().max(200).required(),
   description: yup.string().max(2000),
   dueDate: yup.date().required(),
-  notifiedTime: yup.number().positive(),
+  notifiedTime: yup.date(),
   adminOnly: yup.boolean(),
   categoryUuid: yup.string().uuid().required(),
 });
