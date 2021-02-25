@@ -3,8 +3,16 @@ import { createConnection } from "typeorm";
 import express from "express";
 import cookieParser from "cookie-parser";
 import * as AWS from "aws-sdk";
+import * as webpush from "web-push";
 
 import { limiter } from "./middleware/rateLimit";
+
+webpush.setGCMAPIKey(process.env.GCM_API_KEY);
+webpush.setVapidDetails(
+  "malito:example@test.com",
+  process.env.PUBLIC_VAPID_KEY,
+  process.env.PRIVATE_VAPID_KEY
+);
 
 AWS.config.update({
   accessKeyId: process.env.AWS_SES_ACCESS_KEY,

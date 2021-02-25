@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 
 import User from "../entity/User";
 import verifyToken from "../middleware/verifyToken";
-import { AuthDataType } from "../types/authDataType";
+import { AuthDataType } from "../types/AuthDataType";
 
 const router = Router();
 

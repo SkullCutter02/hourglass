@@ -7,6 +7,7 @@ export const postTaskSchema = yup.object({
   notifiedTime: yup.date(),
   adminOnly: yup.boolean(),
   categoryUuid: yup.string().uuid().required(),
+  subscription: yup.mixed(),
 });
 
 export const patchTaskSchema = yup.object({

@@ -42,11 +42,11 @@ const IndividualProjectContainer: React.FC = () => {
     });
   };
 
-  function createTask() {
+  async function createTask() {
     if (data.categories.length === 0) {
       alert("You need to create a category first in order to create a task");
     } else {
-      // TODO: router.push
+      await router.push(`/dashboard/project/${data.uuid}/create/task`);
     }
   }
 
@@ -74,7 +74,6 @@ const IndividualProjectContainer: React.FC = () => {
                   buttonColor={"#25b2c1"}
                   buttonHoverColor={"#137c7c"}
                   onClick={() => createTask()}
-                  link={`/dashboard/project/${data.uuid}/create/task`}
                 />
               </div>
             </div>

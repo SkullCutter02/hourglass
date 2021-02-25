@@ -5,7 +5,7 @@ import Project from "../entity/Project";
 import Category from "../entity/Category";
 import verifyToken from "../middleware/verifyToken";
 import { postCategorySchema, patchCategorySchema } from "../schemas/categories";
-import { AuthDataType } from "../types/authDataType";
+import { AuthDataType } from "../types/AuthDataType";
 import validateSchema from "../middleware/validateSchema";
 import client from "../utils/redisClient";
 

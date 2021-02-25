@@ -8,7 +8,7 @@ import User from "../entity/User";
 import validateSchema from "../middleware/validateSchema";
 import verifyToken from "../middleware/verifyToken";
 import { authLogInSchema, authResetPassSchema, authSendEmailSchema, authSignUpSchema } from "../schemas/auth";
-import { AuthDataType } from "../types/authDataType";
+import { AuthDataType } from "../types/AuthDataType";
 import cookieOptions from "../utils/cookieOptions";
 import client from "../utils/redisClient";
 import transporter from "../utils/transporter";

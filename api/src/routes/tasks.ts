@@ -7,9 +7,10 @@ import Task from "../entity/Task";
 import verifyToken from "../middleware/verifyToken";
 import validateSchema from "../middleware/validateSchema";
 import { postTaskSchema, patchTaskSchema } from "../schemas/tasks";
-import { AuthDataType } from "../types/authDataType";
+import { AuthDataType } from "../types/AuthDataType";
 import client from "../utils/redisClient";
 import isDatePast from "../utils/isDatePast";
+import { scheduleNotification } from "../services/scheduleNotifications";
 
 const router = Router();
 
@@ -64,6 +65,7 @@ router.post(
         notifiedTime,
         adminOnly,
         categoryUuid,
+        subscription,
       }: TypeOf<typeof postTaskSchema> = req.body;
       const authData: AuthDataType = res.locals.authData;
 
@@ -90,6 +92,8 @@ router.post(
 
           client.del(`projects_${project.uuid}`);
           await task.save();
+
+          await scheduleNotification(notifiedTime, task, subscription);
           return res.json(task);
         } else {
           return res.status(403).json({ msg: "You do not have access to post a new task to this project" });
