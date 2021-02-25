@@ -1,6 +1,5 @@
 import React from "react";
-import Select from "react-select";
-import { OptionTypeBase, ActionMeta } from "react-select";
+import Select, { OptionTypeBase, ActionMeta } from "react-select";
 
 interface Props {
   selectedOption: OptionTypeBase | null;

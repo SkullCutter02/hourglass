@@ -46,6 +46,10 @@ button {
   cursor: pointer;
 }
 
+.task-select > div {
+  cursor: pointer;
+}
+
 @media screen and (max-width: 500px) {
   .filter-select > div {
     width: 100px;

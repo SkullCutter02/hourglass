@@ -15,7 +15,7 @@ router.get("/:projectUuid", async (req: Request, res: Response) => {
   try {
     const { projectUuid } = req.params;
     const project = await Project.findOneOrFail({ uuid: projectUuid }, { relations: ["categories"] });
-    return res.json(project);
+    return res.json(project.categories);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ msg: "Something went wrong" });

@@ -4,6 +4,8 @@ import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
 import Refresh from "../components/Refresh";
 import PageWithLayoutType from "../components/layout/PageWithLayoutType";
@@ -38,11 +40,13 @@ function App({ Component, pageProps }: AppLayoutProps) {
                 rel="stylesheet"
               />
             </Head>
-            <Refresh />
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-            <ReactQueryDevtools />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Refresh />
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+              <ReactQueryDevtools />
+            </MuiPickersUtilsProvider>
           </RecoilRoot>
         </Hydrate>
       </QueryClientProvider>

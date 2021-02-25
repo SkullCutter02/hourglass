@@ -119,8 +119,10 @@ router.patch(
         name,
         description,
         dueDate,
+        notifiedTime,
         adminOnly,
         categoryUuid,
+        subscription,
       }: TypeOf<typeof patchTaskSchema> = req.body;
       const authData: AuthDataType = res.locals.authData;
 
@@ -160,6 +162,7 @@ router.patch(
           task.name = name || task.name;
           task.description = description || task.description;
           task.dueDate = dueDate || task.dueDate;
+          task.notifiedTime = notifiedTime || task.notifiedTime;
           task.adminOnly = adminOnly || task.adminOnly;
           task.category = category || task.category;
 
