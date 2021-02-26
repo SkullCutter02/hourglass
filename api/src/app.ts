@@ -6,6 +6,7 @@ import * as AWS from "aws-sdk";
 import * as webpush from "web-push";
 
 import { limiter } from "./middleware/rateLimit";
+import { rescheduleNotifications } from "./services/scheduleNotifications";
 
 webpush.setGCMAPIKey(process.env.GCM_API_KEY);
 webpush.setVapidDetails(
@@ -40,7 +41,8 @@ app.use("/tasks", require("./routes/tasks"));
 app.use("/users", require("./routes/users"));
 
 createConnection()
-  .then(() => {
-    app.listen(5000, () => console.log("Server started"));
+  .then(async () => {
+    await app.listen(5000, () => console.log("Server started"));
+    await rescheduleNotifications();
   })
   .catch((err) => console.log(err));

@@ -8,7 +8,13 @@ export default class Schedule extends Model {
   @Column()
   date: Date;
 
-  @OneToOne(() => Task)
+  @Column()
+  subscription: string; // this column is JSON.stringified
+
+  @OneToOne(() => Task, {
+    cascade: ["remove"],
+    onDelete: "CASCADE",
+  })
   @JoinColumn()
   task: Task;
 }
