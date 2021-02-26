@@ -93,7 +93,10 @@ router.post(
           client.del(`projects_${project.uuid}`);
           await task.save();
 
-          await scheduleNotification(notifiedTime, task, subscription);
+          if (subscription) {
+            await scheduleNotification(notifiedTime, task, subscription);
+          }
+
           return res.json(task);
         } else {
           return res.status(403).json({ msg: "You do not have access to post a new task to this project" });
