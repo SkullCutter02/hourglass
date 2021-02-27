@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { isPast, parseISO } from "date-fns";
+import { useRecoilValue } from "recoil";
+import { useQueryClient } from "react-query";
 
 import { ProjectType } from "../../types/ProjectType";
 import { TasksType } from "../../types/TasksType";
@@ -9,10 +11,19 @@ import Spinner from "../reusable/Spinner";
 import AddButton from "../reusable/AddButton";
 import TasksTableHeader from "../TasksTableHeader";
 import ViewMembers from "../ViewMembers";
+import { useOutsideClick } from "../../utils/hooks/useOutsideClick";
+import userState from "../../state/userState";
 
 const IndividualProjectContainer: React.FC = () => {
   const router = useRouter();
   const { uuid } = router.query;
+
+  const user = useRecoilValue(userState);
+  const queryClient = useQueryClient();
+
+  const [editNameMode, setEditNameMode] = useState<boolean>(false);
+
+  const changeNameHeaderRef = useRef<HTMLHeadingElement>(null);
 
   const fetchProject = async () => {
     const res = await fetch(`/api/projects/${uuid}`);
@@ -50,6 +61,33 @@ const IndividualProjectContainer: React.FC = () => {
     }
   }
 
+  // TODO: Check if anyone is able to edit the project name, sposingly only admins are able to
+
+  useOutsideClick(async () => {
+    if (editNameMode && changeNameHeaderRef.current) {
+      // Check if text only contains white space
+      if (
+        /\S/.test(changeNameHeaderRef.current.textContent) &&
+        changeNameHeaderRef.current.textContent !== data.name
+      ) {
+        const res = await fetch(`/api/projects/${uuid}`, {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: changeNameHeaderRef.current.textContent.trim(),
+          }),
+        });
+
+        if (res.ok) await queryClient.prefetchQuery(["project", uuid]);
+      }
+    }
+
+    setEditNameMode(false);
+  }, changeNameHeaderRef);
+
   return (
     <React.Fragment>
       {isLoading ? (
@@ -60,7 +98,27 @@ const IndividualProjectContainer: React.FC = () => {
         <div className="projects-container">
           <div>
             <div className="project-info">
-              <h1>{data.name}</h1>
+              {!editNameMode ? (
+                <h1
+                  onClick={() => {
+                    if (
+                      !editNameMode &&
+                      data.projectMembers.some(
+                        (projectMember) =>
+                          projectMember.user.uuid === user.uuid && projectMember.role === "admin"
+                      )
+                    ) {
+                      setEditNameMode(true);
+                    }
+                  }}
+                >
+                  {data.name}
+                </h1>
+              ) : (
+                <h1 className="change-name-input" ref={changeNameHeaderRef} role="textbox" contentEditable>
+                  {data.name}
+                </h1>
+              )}
               <div>
                 <ViewMembers project={data} />
                 <AddButton

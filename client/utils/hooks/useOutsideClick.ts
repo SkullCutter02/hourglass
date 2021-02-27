@@ -3,7 +3,7 @@ import { useEffect, MutableRefObject } from "react";
 export function useOutsideClick(fn: (...any) => void, ...refs: MutableRefObject<any>[]) {
   useEffect(() => {
     function handleClickOutside(e) {
-      const clickOutside = refs.every((ref) => !ref.current.contains(e.target));
+      const clickOutside = refs.every((ref) => ref.current && !ref.current.contains(e.target));
 
       if (clickOutside) {
         fn();

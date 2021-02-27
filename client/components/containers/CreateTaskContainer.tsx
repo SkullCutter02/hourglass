@@ -81,7 +81,7 @@ const CreateTaskContainer: React.FC = () => {
           },
           body: JSON.stringify({
             name: e.target.name.value,
-            description: e.target.description.value.replace("\r", "<br/>"),
+            description: e.target.description.value,
             dueDate: dueDate,
             notifiedTime: subMilliseconds(dueDate, notifiedTime.value),
             adminOnly: e.target.adminOnly.checked,

@@ -54,7 +54,7 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`/api/projects/members/invite/${inputRef.current.value}`, {
+      const res = await fetch(`/api/projects/members/invite/${inputRef.current.value.toLowerCase().trim()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
