@@ -11,8 +11,8 @@ import AsideProject from "../AsideProject";
 import logout from "../../utils/logout";
 import Notification from "../Notification";
 import { UserProjectsType } from "../../types/UserProjectsType";
-import { useOutsideClick } from "../../utils/useOutsideClick";
-import { useWindowWidth } from "../../utils/useWindowWidth";
+import { useOutsideClick } from "../../utils/hooks/useOutsideClick";
+import { useWindowWidth } from "../../utils/hooks/useWindowWidth";
 
 const DashboardLayout: React.FC = ({ children }) => {
   const router = useRouter();
