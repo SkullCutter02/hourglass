@@ -7,6 +7,7 @@ import { subMilliseconds } from "date-fns";
 import { CategoryType } from "../../types/CategoryType";
 import { urlBase64ToUint8Array } from "../../utils/urlBase64ToUInt8Array";
 import TaskLayout from "../layout/TaskLayout";
+import { requestPermission } from "../../utils/requestPermission";
 
 const CreateTaskContainer: React.FC = () => {
   const router = useRouter();
@@ -49,13 +50,34 @@ const CreateTaskContainer: React.FC = () => {
     e.preventDefault();
 
     try {
-      await Notification.requestPermission();
       setLoading(true);
+
+      if (!(category && notifiedTime && dueDate)) {
+        errMsgRef.current.textContent = "Due date, category or notified time fields cannot be empty";
+        setLoading(false);
+        return;
+      }
+
+      if (!("Notification" in window) && notifiedTime.value !== 0) {
+        errMsgRef.current.textContent =
+          "Notifications are not supported in your browser. The notify me feature will not work";
+        setLoading(false);
+        return;
+      }
+
+      if (!("serviceWorker" in navigator) && notifiedTime.value !== 0) {
+        errMsgRef.current.textContent =
+          "Service workers are not supported in your browser. The notify me feature will not work";
+        setLoading(false);
+        return;
+      }
+
+      const permission = notifiedTime.value !== 0 ? await requestPermission() : false;
 
       let register: ServiceWorkerRegistration;
       let subscription: PushSubscription;
 
-      if ("serviceWorker" in navigator && Notification.permission === "granted") {
+      if (permission) {
         register = await navigator.serviceWorker.register("/sw.js", {
           scope: "/",
         });
@@ -64,50 +86,47 @@ const CreateTaskContainer: React.FC = () => {
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_KEY),
         });
-      } else {
-        if (notifiedTime.value !== 0) {
-          alert("Notification permission is not granted. Notify me feature will not work");
-        }
+      } else if (notifiedTime.value !== 0) {
+        errMsgRef.current.textContent = "You have denied notifications. The notify me feature will not work";
+        setLoading(false);
+        return;
       }
 
-      if (category && notifiedTime && dueDate) {
-        errMsgRef.current.textContent = "";
+      errMsgRef.current.textContent = "";
 
-        const res = await fetch(`/api/tasks/${uuid}`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: e.target.name.value,
-            description: e.target.description.value,
-            dueDate: dueDate,
-            notifiedTime: subMilliseconds(dueDate, notifiedTime.value),
-            adminOnly: e.target.adminOnly.checked,
-            categoryUuid: category.value,
-            subscription:
-              "serviceWorker" in navigator && Notification.permission === "granted" ? subscription : null,
-          }),
-        });
-        const data = await res.json();
+      const res = await fetch(`/api/tasks/${uuid}`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: e.target.name.value,
+          description: e.target.description.value,
+          dueDate: dueDate,
+          notifiedTime: subMilliseconds(dueDate, notifiedTime.value),
+          adminOnly: e.target.adminOnly.checked,
+          categoryUuid: category.value,
+          subscription: permission && notifiedTime.value !== 0 ? subscription : null,
+        }),
+      });
+      const data = await res.json();
 
-        if (!res.ok) {
-          if (data.msg) {
-            errMsgRef.current.textContent = data.msg;
-          } else {
-            errMsgRef.current.textContent = "Something went wrong";
-          }
-
-          setLoading(false);
+      if (!res.ok) {
+        if (data.msg) {
+          errMsgRef.current.textContent = data.msg;
         } else {
-          await router.push(`/dashboard/project/${uuid}`);
+          errMsgRef.current.textContent = "Something went wrong. Please try again or reload the page";
         }
+
+        setLoading(false);
       } else {
-        errMsgRef.current.textContent = "Due date, category or notified time fields cannot be empty";
+        await router.push(`/dashboard/project/${uuid}`);
       }
+      setLoading(false);
     } catch (err) {
       console.log(err);
+      errMsgRef.current.textContent = "Something went wrong. Please try again or reload the page";
       setLoading(false);
     }
   };

@@ -78,6 +78,7 @@ const TaskLayout: React.FC<Props> = ({
               placeholder={"Category"}
               isLoading={isLoading}
               className={"task-select"}
+              isSearchable={false}
             />
           </div>
           <div className="category-select">
@@ -85,8 +86,9 @@ const TaskLayout: React.FC<Props> = ({
               defaultValue={notifiedTime}
               onChange={setNotifiedTime}
               options={notifyTimeOptions}
-              placeholder={"Notify before"}
+              placeholder={"Notify me before"}
               className={"task-select"}
+              isSearchable={false}
             />
           </div>
           <div className="admin-only">

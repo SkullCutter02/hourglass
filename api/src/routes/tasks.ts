@@ -93,7 +93,7 @@ router.post(
           client.del(`projects_${project.uuid}`);
           await task.save();
 
-          if (subscription) {
+          if (subscription !== null) {
             await scheduleNotification(notifiedTime, task, subscription);
           }
 
