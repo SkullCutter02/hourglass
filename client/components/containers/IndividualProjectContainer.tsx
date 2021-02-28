@@ -22,8 +22,10 @@ const IndividualProjectContainer: React.FC = () => {
   const queryClient = useQueryClient();
 
   const [editNameMode, setEditNameMode] = useState<boolean>(false);
+  const [editDescriptionMode, setEditDescriptionMode] = useState<boolean>(false);
 
   const changeNameHeaderRef = useRef<HTMLHeadingElement>(null);
+  const changeDescriptionRef = useRef<HTMLParagraphElement>(null);
 
   const fetchProject = async () => {
     const res = await fetch(`/api/projects/${uuid}`);
@@ -61,32 +63,67 @@ const IndividualProjectContainer: React.FC = () => {
     }
   }
 
-  // TODO: Check if anyone is able to edit the project name, sposingly only admins are able to
-
   useOutsideClick(async () => {
     if (editNameMode && changeNameHeaderRef.current) {
       // Check if text only contains white space
       if (
         /\S/.test(changeNameHeaderRef.current.textContent) &&
-        changeNameHeaderRef.current.textContent !== data.name
+        changeNameHeaderRef.current.textContent.trim() !== data.name
       ) {
-        const res = await fetch(`/api/projects/${uuid}`, {
-          method: "PATCH",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: changeNameHeaderRef.current.textContent.trim(),
-          }),
-        });
+        try {
+          const res = await fetch(`/api/projects/${uuid}`, {
+            method: "PATCH",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: changeNameHeaderRef.current.textContent.trim(),
+            }),
+          });
 
-        if (res.ok) await queryClient.prefetchQuery(["project", uuid]);
+          if (res.ok) {
+            await queryClient.prefetchQuery(["project", uuid]);
+            await queryClient.prefetchQuery("userProjects");
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
     }
 
     setEditNameMode(false);
   }, changeNameHeaderRef);
+
+  useOutsideClick(async () => {
+    if (editDescriptionMode && changeDescriptionRef.current) {
+      if (
+        /\S/.test(changeDescriptionRef.current.textContent) &&
+        changeDescriptionRef.current.textContent.trim() !== data.description
+      ) {
+        try {
+          const res = await fetch(`/api/projects/${uuid}`, {
+            method: "PATCH",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              description: changeDescriptionRef.current.textContent.trim(),
+            }),
+          });
+
+          if (res.ok) {
+            await queryClient.prefetchQuery(["project", uuid]);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
+
+    setEditDescriptionMode(false);
+  }, changeDescriptionRef);
 
   return (
     <React.Fragment>
@@ -115,7 +152,13 @@ const IndividualProjectContainer: React.FC = () => {
                   {data.name}
                 </h1>
               ) : (
-                <h1 className="change-name-input" ref={changeNameHeaderRef} role="textbox" contentEditable>
+                <h1
+                  className="change-name-input"
+                  ref={changeNameHeaderRef}
+                  role="textbox"
+                  contentEditable
+                  suppressContentEditableWarning
+                >
                   {data.name}
                 </h1>
               )}
@@ -135,7 +178,36 @@ const IndividualProjectContainer: React.FC = () => {
                 />
               </div>
             </div>
-            {data.description && <p className="description">{data.description}</p>}
+            {data.description ? (
+              !editDescriptionMode ? (
+                <p
+                  className="description"
+                  onClick={() => {
+                    if (
+                      !editDescriptionMode &&
+                      data.projectMembers.some(
+                        (projectMember) =>
+                          projectMember.user.uuid === user.uuid && projectMember.role === "admin"
+                      )
+                    ) {
+                      setEditDescriptionMode(true);
+                    }
+                  }}
+                >
+                  {data.description}
+                </p>
+              ) : (
+                <p
+                  className="description change-description-input"
+                  ref={changeDescriptionRef}
+                  role={"textbox"}
+                  contentEditable
+                  suppressContentEditableWarning
+                >
+                  {data.description}
+                </p>
+              )
+            ) : null}
             <TasksTableHeader tasks={groupTasks(data, true)} text={"These tasks are due: "} />
             <TasksTableHeader tasks={groupTasks(data, false)} text={"Upcoming tasks: "} />
           </div>
