@@ -16,7 +16,7 @@ const IndividualCategoryContainer: React.FC = () => {
   };
 
   const { isLoading, isError, error, data } = useQuery<CategoryType, Error>(
-    `category_${categoryUuid}`,
+    ["category", categoryUuid],
     () => fetchTasks(),
     {
       enabled: !!categoryUuid,
@@ -31,7 +31,12 @@ const IndividualCategoryContainer: React.FC = () => {
         <div>{error.message}</div>
       ) : data ? (
         <div className="category-container">
-          <TasksTableHeader tasks={data.tasks} text={data.name.toUpperCase()} color={data.color} />
+          <TasksTableHeader
+            tasks={data.tasks}
+            text={data.name.toUpperCase()}
+            color={data.color}
+            editable={true}
+          />
         </div>
       ) : (
         <Spinner size={40} />
