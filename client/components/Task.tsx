@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { formatDistanceToNow, isPast, parseISO, format } from "date-fns";
+import React, { useEffect, useState } from "react";
+import { format, formatDistanceToNow, isPast, parseISO } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/router";
 
 import { TasksType } from "../types/TasksType";
 
@@ -11,6 +12,27 @@ interface Props {
 
 const Task: React.FC<Props> = ({ task }) => {
   const [expand, setExpand] = useState<boolean>(false);
+  const [canEdit, setCanEdit] = useState<boolean>(false);
+
+  const router = useRouter();
+  const { uuid } = router.query;
+
+  useEffect(() => {
+    const checkAccess = async (): Promise<boolean> => {
+      const res = await fetch(`/api/users/admin/${uuid}`, {
+        credentials: "include",
+      });
+      return await res.json();
+    };
+
+    if (task) {
+      if (!task.adminOnly) {
+        setCanEdit(true);
+      } else {
+        checkAccess().then((res) => setCanEdit(res));
+      }
+    }
+  }, [task]);
 
   return (
     <React.Fragment>
@@ -34,8 +56,15 @@ const Task: React.FC<Props> = ({ task }) => {
             {isPast(parseISO(task.dueDate))
               ? "Due already!"
               : `in ${formatDistanceToNow(parseISO(task.dueDate))}`}
+            {canEdit && (
+              <FontAwesomeIcon
+                icon={faPencilAlt}
+                color={"grey"}
+                style={{ marginLeft: "20px", cursor: "pointer" }}
+              />
+            )}
           </p>
-          <p className="actual-date">{format(parseISO(task.dueDate), "MM/dd/yyyy h:mma").toLowerCase()}</p>
+          <p className="hidden">{format(parseISO(task.dueDate), "MM/dd/yyyy h:mma").toLowerCase()}</p>
         </div>
       </div>
 
@@ -47,12 +76,12 @@ const Task: React.FC<Props> = ({ task }) => {
           text-overflow: initial;
         }
 
-        .actual-date {
+        .hidden {
           margin-top: 10px;
           display: none;
         }
 
-        .expanded-tasks-grid .actual-date {
+        .expanded-tasks-grid .hidden {
           display: block;
         }
       `}</style>
