@@ -6,7 +6,7 @@ import ProjectRequest from "../../entity/ProjectRequest";
 import ProjectMembers from "../../entity/ProjectMembers";
 import verifyToken from "../../middleware/verifyToken";
 import { AuthDataType } from "../../types/AuthDataType";
-import client from "../../utils/redisClient";
+import client from "../../services/redisClient";
 
 const router = Router();
 

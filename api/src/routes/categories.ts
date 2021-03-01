@@ -7,7 +7,7 @@ import verifyToken from "../middleware/verifyToken";
 import { postCategorySchema, patchCategorySchema } from "../schemas/categories";
 import { AuthDataType } from "../types/AuthDataType";
 import validateSchema from "../middleware/validateSchema";
-import client from "../utils/redisClient";
+import client from "../services/redisClient";
 
 const router = Router();
 

@@ -8,7 +8,7 @@ import verifyToken from "../middleware/verifyToken";
 import validateSchema from "../middleware/validateSchema";
 import { postTaskSchema, patchTaskSchema } from "../schemas/tasks";
 import { AuthDataType } from "../types/AuthDataType";
-import client from "../utils/redisClient";
+import client from "../services/redisClient";
 import isDatePast from "../utils/isDatePast";
 import { scheduleNotification } from "../services/scheduleNotifications";
 

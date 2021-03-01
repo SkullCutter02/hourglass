@@ -10,8 +10,8 @@ import verifyToken from "../middleware/verifyToken";
 import { authLogInSchema, authResetPassSchema, authSendEmailSchema, authSignUpSchema } from "../schemas/auth";
 import { AuthDataType } from "../types/AuthDataType";
 import cookieOptions from "../utils/cookieOptions";
-import client from "../utils/redisClient";
-import transporter from "../utils/transporter";
+import client from "../services/redisClient";
+import transporter from "../services/transporter";
 import { authLimiter } from "../middleware/rateLimit";
 
 const router = Router();

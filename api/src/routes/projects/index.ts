@@ -8,7 +8,7 @@ import { createProjectSchema, patchProjectSchema } from "../../schemas/projects"
 import validateSchema from "../../middleware/validateSchema";
 import verifyToken from "../../middleware/verifyToken";
 import { AuthDataType } from "../../types/AuthDataType";
-import client from "../../utils/redisClient";
+import client from "../../services/redisClient";
 
 const router = Router();
 
