@@ -3,6 +3,7 @@ import { format, formatDistanceToNow, isPast, parseISO } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 import { TasksType } from "../types/TasksType";
 
@@ -57,11 +58,13 @@ const Task: React.FC<Props> = ({ task }) => {
               ? "Due already!"
               : `in ${formatDistanceToNow(parseISO(task.dueDate))}`}
             {canEdit && (
-              <FontAwesomeIcon
-                icon={faPencilAlt}
-                color={"grey"}
-                style={{ marginLeft: "20px", cursor: "pointer" }}
-              />
+              <Link href={`/dashboard/project/${uuid}/edit/${task.uuid}`}>
+                <FontAwesomeIcon
+                  icon={faPencilAlt}
+                  color={"grey"}
+                  style={{ marginLeft: "20px", cursor: "pointer" }}
+                />
+              </Link>
             )}
           </p>
           <p className="hidden">{format(parseISO(task.dueDate), "MM/dd/yyyy h:mma").toLowerCase()}</p>
