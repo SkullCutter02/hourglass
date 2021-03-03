@@ -4,4 +4,5 @@ COPY ./package*.json ./
 RUN npm install
 COPY . .
 ENV NODE_ENV=production
-CMD npm run start
+RUN npm run build
+CMD npm run typeorm migration:run && npm run start
