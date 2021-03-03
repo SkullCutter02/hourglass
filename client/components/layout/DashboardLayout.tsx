@@ -16,6 +16,8 @@ import { useWindowWidth } from "../../utils/hooks/useWindowWidth";
 
 const DashboardLayout: React.FC = ({ children }) => {
   const router = useRouter();
+  const { uuid } = router.query;
+
   const user = useRecoilValue(userState);
 
   const [openHamburger, setOpenHamburger] = useState(true);
@@ -51,6 +53,21 @@ const DashboardLayout: React.FC = ({ children }) => {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    const checkAccess = async (): Promise<boolean> => {
+      const res = await fetch(`/api/users/access/${uuid}`);
+      return await res.json();
+    };
+
+    if (uuid) {
+      checkAccess().then((res) => {
+        if (!res) {
+          router.back();
+        }
+      });
+    }
+  }, [uuid]);
 
   const fetchUserProjects = async () => {
     const res = await fetch("/api/users/projects", {

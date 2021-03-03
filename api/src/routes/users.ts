@@ -42,4 +42,23 @@ router.get("/admin/:projectUuid", verifyToken(), async (req: Request, res: Respo
   }
 });
 
+router.get("/access/:projectUuid", verifyToken(), async (req: Request, res: Response) => {
+  try {
+    const { projectUuid } = req.params;
+    const authData: AuthDataType = res.locals.authData;
+
+    const project = await Project.findOneOrFail(
+      { uuid: projectUuid },
+      { relations: ["projectMembers", "projectMembers.user"] }
+    );
+
+    const isMember = project.projectMembers.some((projectMember) => projectMember.user.uuid == authData.uuid);
+
+    return res.json(isMember);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
 module.exports = router;
