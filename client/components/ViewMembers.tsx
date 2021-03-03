@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 
 import { ProjectType } from "../types/ProjectType";
 import userState from "../state/userState";
+import { useOutsideClick } from "../utils/hooks/useOutsideClick";
 
 interface Props {
   project: ProjectType;
@@ -13,6 +14,7 @@ interface Props {
 const ViewMembers: React.FC<Props> = ({ project }) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
+  const mainBtnRef = useRef<HTMLButtonElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,6 +43,8 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
       formRef.current.style.display = "none";
     }
   };
+
+  useOutsideClick(() => togglePopup(true), mainBtnRef);
 
   const toggleForm = () => {
     if (formRef.current.style.display === "none") {
@@ -121,7 +125,7 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
   return (
     <React.Fragment>
       <div className="container">
-        <button className="view-members-main-btn" onClick={() => togglePopup(false)} tabIndex={0}>
+        <button className="view-members-main-btn" onClick={() => togglePopup(false)} ref={mainBtnRef}>
           Members
         </button>
         <div className="popup" style={{ display: "none" }} ref={popupRef}>
