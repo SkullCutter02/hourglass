@@ -1,0 +1,25 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+script:
+  - docker build -t skullcutter02/hourglass-client ./client
+  - docker build -t skullcutter02/hourglass-api ./api
+  - docker build -t skullcutter02/hourglass-nginx ./nginx
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push skullcutter02/hourglass-client
+  - docker push skullcutter02/hourglass-api
+  - docker push skullcutter02/hourglass-nginx
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "hourglass"
+  env: "Hourglass-env"
+  bucket_name: "elasticbeanstalk-us-east-2-740995310974"
+  bucket_path: "hourglass"
+  on:
+    branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY

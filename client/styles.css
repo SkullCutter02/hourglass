@@ -1,0 +1,94 @@
+:root {
+  --font-family: "Inter", Calibre, "San Francisco", "SF Pro Text", -apple-system, system-ui, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+}
+
+textarea {
+  font-family: var(--font-family);
+}
+
+textarea::-webkit-input-placeholder {
+  font-family: var(--font-family);
+}
+
+textarea:-ms-input-placeholder {
+  font-family: var(--font-family);
+}
+
+textarea:-moz-placeholder {
+  font-family: var(--font-family);
+}
+
+textarea::-moz-placeholder {
+  font-family: var(--font-family);
+}
+
+button {
+  cursor: pointer;
+}
+
+.err-msg {
+  color: #c60606;
+  font-size: 0.85rem;
+}
+
+.filter-select > div {
+  width: 150px;
+  cursor: pointer;
+}
+
+.task-select > div {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 500px) {
+  .filter-select > div {
+    width: 100px;
+  }
+}
+
+.success {
+  color: #10cb10;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.tasks-grid {
+  display: grid;
+  grid-template-columns: 3fr 4fr 2fr;
+  border-bottom: 1px solid #d6d6d6;
+  padding: 10px 0;
+  min-width: fit-content;
+}
+
+.tasks-grid-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  min-width: 180px;
+}
+
+@media screen and (max-width: 800px) {
+  .tasks-grid-item {
+    min-width: 220px;
+  }
+}
+
+.tasks-grid-item p {
+  margin-left: 20px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+}
