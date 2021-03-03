@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { format, formatDistanceToNow, isPast, parseISO } from "date-fns";
+import { format, formatDistanceToNow, isPast, parseISO, formatDistance } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
@@ -68,7 +68,12 @@ const Task: React.FC<Props> = ({ task }) => {
             )}
           </p>
           <p className="hidden">{format(parseISO(task.dueDate), "MM/dd/yyyy h:mma").toLowerCase()}</p>
-          <p className="hidden">Notify me before: {formatDistanceToNow(parseISO(task.notifiedTime))}</p>
+          <p className="hidden">
+            Notify me before:{" "}
+            {task.dueDate !== task.notifiedTime
+              ? formatDistance(parseISO(task.dueDate), parseISO(task.notifiedTime))
+              : "None"}
+          </p>
           {task.adminOnly && <p className="hidden">Admin Only</p>}
         </div>
       </div>
