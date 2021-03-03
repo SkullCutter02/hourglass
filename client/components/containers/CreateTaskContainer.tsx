@@ -146,6 +146,7 @@ const CreateTaskContainer: React.FC = () => {
       options={options}
       buttonText={"Create Task"}
       header={"Create new Task"}
+      selectPlaceholder={"Notify me before"}
     />
   );
 };

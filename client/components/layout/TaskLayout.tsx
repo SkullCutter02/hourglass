@@ -22,6 +22,7 @@ interface Props {
   defaultName?: string;
   defaultDescription?: string;
   header: string;
+  selectPlaceholder: string;
 }
 
 const TaskLayout: React.FC<Props> = ({
@@ -40,9 +41,10 @@ const TaskLayout: React.FC<Props> = ({
   defaultName,
   defaultDescription,
   header,
+  selectPlaceholder,
 }) => {
   const notifyTimeOptions = [
-    { value: 0, label: "None" },
+    { value: 0, label: "No Notification" },
     { value: 600_000, label: "10 mins" },
     { value: 1_800_000, label: "30 mins" },
     { value: 3_600_000, label: "1 hr" },
@@ -95,7 +97,7 @@ const TaskLayout: React.FC<Props> = ({
               value={notifiedTime}
               onChange={setNotifiedTime}
               options={notifyTimeOptions}
-              placeholder={"Notify me before"}
+              placeholder={selectPlaceholder}
               className={"task-select"}
               isSearchable={false}
             />
@@ -119,7 +121,7 @@ const TaskLayout: React.FC<Props> = ({
 
       <style jsx>{`
         .create-task-form {
-          width: 80%;
+          width: 90%;
           height: 480px;
           margin: 70px auto;
           display: flex;
