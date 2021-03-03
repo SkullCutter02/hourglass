@@ -17,7 +17,7 @@ const Task: React.FC<Props> = ({ task }) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
 
   const router = useRouter();
-  const { uuid } = router.query;
+  const { uuid, categoryUuid } = router.query;
 
   const queryClient = useQueryClient();
 
@@ -46,7 +46,11 @@ const Task: React.FC<Props> = ({ task }) => {
       });
 
       if (res.ok) {
-        await queryClient.prefetchQuery(["project", uuid]);
+        if (categoryUuid) {
+          await queryClient.prefetchQuery(["category", categoryUuid]);
+        } else {
+          await queryClient.prefetchQuery(["project", uuid]);
+        }
       }
     } catch (err) {
       console.log(err);
