@@ -10,7 +10,7 @@ import { postTaskSchema, patchTaskSchema } from "../schemas/tasks";
 import { AuthDataType } from "../types/AuthDataType";
 import client from "../services/redisClient";
 import isDatePast from "../utils/isDatePast";
-import { scheduleNotification } from "../services/scheduleNotifications";
+import { scheduleNotification, deleteNotification } from "../services/scheduleNotifications";
 
 const router = Router();
 
@@ -168,6 +168,11 @@ router.patch(
           task.notifiedTime = notifiedTime || task.notifiedTime;
           task.adminOnly = adminOnly || task.adminOnly;
           task.category = category || task.category;
+
+          if (subscription !== null && notifiedTime) {
+            await deleteNotification(task);
+            await scheduleNotification(notifiedTime, task, subscription);
+          }
 
           await task.save();
           return res.json(task);
