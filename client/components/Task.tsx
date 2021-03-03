@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faPencilAlt, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useQueryClient } from "react-query";
 
 import { TaskType } from "../types/TaskType";
 
@@ -17,6 +18,8 @@ const Task: React.FC<Props> = ({ task }) => {
 
   const router = useRouter();
   const { uuid } = router.query;
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const checkAccess = async (): Promise<boolean> => {
@@ -34,6 +37,21 @@ const Task: React.FC<Props> = ({ task }) => {
       }
     }
   }, [task]);
+
+  const deleteTask = async () => {
+    try {
+      const res = await fetch(`/api/tasks/${task.uuid}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        await queryClient.prefetchQuery(["project", uuid]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -69,7 +87,7 @@ const Task: React.FC<Props> = ({ task }) => {
               )}
               {canEdit && (
                 <span className="icon">
-                  <FontAwesomeIcon icon={faCheckDouble} color={"#56dd0f"} />
+                  <FontAwesomeIcon icon={faCheckDouble} color={"#56dd0f"} onClick={deleteTask} />
                 </span>
               )}
             </div>

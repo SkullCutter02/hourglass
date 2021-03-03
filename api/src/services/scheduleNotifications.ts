@@ -42,14 +42,17 @@ export async function rescheduleNotifications() {
 
 export async function deleteNotification(task: Task) {
   try {
-    const schedule = await Schedule.findOneOrFail({ task });
-    const jobs = getNotifications();
-    const job = jobs[schedule.uuid];
+    const schedule = await Schedule.findOne({ task });
 
-    if (!job) throw new Error("Job not found!");
+    if (schedule) {
+      const jobs = getNotifications();
+      const job = jobs[schedule.uuid];
 
-    await schedule.remove();
-    job.cancel();
+      if (!job) throw new Error("Job not found!");
+
+      await schedule.remove();
+      job.cancel();
+    }
   } catch (err) {
     throw err;
   }
