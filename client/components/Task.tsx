@@ -68,6 +68,8 @@ const Task: React.FC<Props> = ({ task }) => {
             )}
           </p>
           <p className="hidden">{format(parseISO(task.dueDate), "MM/dd/yyyy h:mma").toLowerCase()}</p>
+          <p className="hidden">Notify me before: {formatDistanceToNow(parseISO(task.notifiedTime))}</p>
+          {task.adminOnly && <p className="hidden">Admin Only</p>}
         </div>
       </div>
 
@@ -82,6 +84,7 @@ const Task: React.FC<Props> = ({ task }) => {
         .hidden {
           margin-top: 10px;
           display: none;
+          font-size: 0.9rem;
         }
 
         .expanded-tasks-grid .hidden {

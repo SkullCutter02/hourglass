@@ -5,6 +5,6 @@ export type TaskType = {
   name: string;
   description: string;
   dueDate: string;
-  notifiedTime: Date;
+  notifiedTime: string;
   adminOnly: boolean;
 };
