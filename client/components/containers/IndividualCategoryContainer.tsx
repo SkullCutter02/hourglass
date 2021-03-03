@@ -36,6 +36,7 @@ const IndividualCategoryContainer: React.FC = () => {
             text={data.name.toUpperCase()}
             color={data.color}
             editable={true}
+            isSourceCategory={true}
           />
         </div>
       ) : (

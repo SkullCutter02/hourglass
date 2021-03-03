@@ -13,9 +13,16 @@ interface Props {
   text: string;
   color?: string;
   editable?: boolean;
+  isSourceCategory?: boolean;
 }
 
-const TasksTableHeader: React.FC<Props> = ({ tasks, text, color, editable = false }) => {
+const TasksTableHeader: React.FC<Props> = ({
+  tasks,
+  text,
+  color,
+  editable = false,
+  isSourceCategory = false,
+}) => {
   const [selectedOption, setSelectedOption] = useState<OptionTypeBase | null>(null);
   const [editNameMode, setEditNameMode] = useState<boolean>(true);
 
@@ -55,6 +62,32 @@ const TasksTableHeader: React.FC<Props> = ({ tasks, text, color, editable = fals
     setEditNameMode(false);
   }, changeNameRef);
 
+  const removeCategory = async () => {
+    const confirm = window.confirm("Are you sure you want to delete this category?");
+
+    if (confirm) {
+      try {
+        const res = await fetch(`/api/categories/${categoryUuid}`, {
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            projectUuid: uuid,
+          }),
+        });
+
+        if (res.ok) {
+          await queryClient.prefetchQuery("userProjects");
+          await router.push(`/dashboard/project/${uuid}`);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="container">
@@ -76,7 +109,14 @@ const TasksTableHeader: React.FC<Props> = ({ tasks, text, color, editable = fals
             </h2>
           )}
         </span>
-        <Filter selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
+        <span>
+          <Filter selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
+          {isSourceCategory && (
+            <button className="remove-category-btn" onClick={removeCategory}>
+              Remove Category
+            </button>
+          )}
+        </span>
       </div>
       <TasksTable tasks={tasks} filterType={selectedOption?.value} />
 
@@ -105,6 +145,32 @@ const TasksTableHeader: React.FC<Props> = ({ tasks, text, color, editable = fals
         span {
           display: flex;
           align-items: center;
+        }
+
+        .remove-category-btn {
+          border: none;
+          border-radius: 20px;
+          background: #949494;
+          color: #ffffff;
+          padding: 8px 12px;
+          transition: background 0.3s ease;
+          margin-left: 40px;
+        }
+
+        .remove-category-btn:hover {
+          background: #7a7a7a;
+        }
+
+        @media screen and (max-width: 600px) {
+          .container {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          span {
+            margin-top: 20px;
+            width: 100%;
+          }
         }
       `}</style>
     </React.Fragment>
