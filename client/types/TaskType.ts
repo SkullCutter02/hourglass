@@ -1,4 +1,4 @@
-export type TasksType = {
+export type TaskType = {
   uuid: string;
   createdAt: Date;
   updatedAt: Date;

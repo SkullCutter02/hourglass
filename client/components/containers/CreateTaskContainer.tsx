@@ -144,6 +144,8 @@ const CreateTaskContainer: React.FC = () => {
       errMsgRef={errMsgRef}
       loading={loading}
       options={options}
+      buttonText={"Create Task"}
+      header={"Create new Task"}
     />
   );
 };

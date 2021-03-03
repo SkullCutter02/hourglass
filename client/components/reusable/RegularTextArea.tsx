@@ -6,12 +6,20 @@ interface Props {
   height: number;
   required?: boolean;
   margin?: number;
+  defaultValue?: string;
 }
 
-const RegularTextArea: React.FC<Props> = ({ name, placeholder, height, required = true, margin = 0 }) => {
+const RegularTextArea: React.FC<Props> = ({
+  name,
+  placeholder,
+  height,
+  required = true,
+  margin = 0,
+  defaultValue = "",
+}) => {
   return (
     <React.Fragment>
-      <textarea placeholder={placeholder} name={name} required={required} />
+      <textarea placeholder={placeholder} name={name} required={required} defaultValue={defaultValue} />
 
       <style jsx>{`
         textarea {

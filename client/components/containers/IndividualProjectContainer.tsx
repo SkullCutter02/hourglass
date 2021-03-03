@@ -6,7 +6,7 @@ import { useRecoilValue } from "recoil";
 import { useQueryClient } from "react-query";
 
 import { ProjectType } from "../../types/ProjectType";
-import { TasksType } from "../../types/TasksType";
+import { TaskType } from "../../types/TaskType";
 import Spinner from "../reusable/Spinner";
 import AddButton from "../reusable/AddButton";
 import TasksTableHeader from "../TasksTableHeader";
@@ -40,7 +40,7 @@ const IndividualProjectContainer: React.FC = () => {
     }
   );
 
-  const groupTasks = (data: ProjectType, calculatePast: boolean): TasksType[] => {
+  const groupTasks = (data: ProjectType, calculatePast: boolean): TaskType[] => {
     const categoryTasks = data.categories.map((category) => category.tasks);
     const tasks = [];
 

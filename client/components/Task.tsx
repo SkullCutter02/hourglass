@@ -5,10 +5,10 @@ import { faCaretRight, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-import { TasksType } from "../types/TasksType";
+import { TaskType } from "../types/TaskType";
 
 interface Props {
-  task: TasksType;
+  task: TaskType;
 }
 
 const Task: React.FC<Props> = ({ task }) => {

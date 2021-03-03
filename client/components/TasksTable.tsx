@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-import { TasksType } from "../types/TasksType";
+import { TaskType } from "../types/TaskType";
 import Task from "./Task";
 
 type FilterType = "A-Z" | "Z-A" | "nearest due date" | "furthest due date" | undefined;
 
 interface Props {
-  tasks: TasksType[];
+  tasks: TaskType[];
   filterType: FilterType;
 }
 
@@ -17,7 +17,7 @@ const TasksTable: React.FC<Props> = ({ tasks, filterType }) => {
     setCurrentFilter(filterType);
   }, [filterType]);
 
-  const filterItems = (tasks: TasksType[]): TasksType[] => {
+  const filterItems = (tasks: TaskType[]): TaskType[] => {
     if (!currentFilter) {
       return tasks;
     } else if (currentFilter === "A-Z") {

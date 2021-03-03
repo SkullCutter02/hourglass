@@ -1,4 +1,4 @@
-import { TasksType } from "./TasksType";
+import { TaskType } from "./TaskType";
 
 export type CategoryType = {
   uuid: string;
@@ -6,5 +6,5 @@ export type CategoryType = {
   updatedAt: Date;
   name: string;
   color: string;
-  tasks: TasksType[];
+  tasks: TaskType[];
 };

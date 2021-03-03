@@ -18,6 +18,10 @@ interface Props {
   errMsgRef: React.MutableRefObject<HTMLParagraphElement>;
   loading: boolean;
   options: { value: string; label: string }[];
+  buttonText: string;
+  defaultName?: string;
+  defaultDescription?: string;
+  header: string;
 }
 
 const TaskLayout: React.FC<Props> = ({
@@ -32,6 +36,10 @@ const TaskLayout: React.FC<Props> = ({
   errMsgRef,
   loading,
   options,
+  buttonText,
+  defaultName,
+  defaultDescription,
+  header,
 }) => {
   const notifyTimeOptions = [
     { value: 0, label: "None" },
@@ -50,14 +58,15 @@ const TaskLayout: React.FC<Props> = ({
     <React.Fragment>
       <form className="create-task-form" onSubmit={onSubmit}>
         <div className="form-section">
-          <h1>Create new Task</h1>
-          <RegularInput placeholder={"Task name: "} name={"name"} margin={20} />
+          <h1>{header}</h1>
+          <RegularInput placeholder={"Task name: "} name={"name"} margin={20} defaultValue={defaultName} />
           <RegularTextArea
             name={"description"}
             placeholder={"Task description: (Optional)"}
             height={200}
             required={false}
             margin={10}
+            defaultValue={defaultDescription}
           />
           <div className="date-picker">
             <KeyboardDateTimePicker
@@ -72,7 +81,7 @@ const TaskLayout: React.FC<Props> = ({
         <div className="form-section below-form-section">
           <div className="category-select">
             <Select
-              defaultValue={category}
+              value={category}
               onChange={setCategory}
               options={options}
               placeholder={"Category"}
@@ -83,7 +92,7 @@ const TaskLayout: React.FC<Props> = ({
           </div>
           <div className="category-select">
             <Select
-              defaultValue={notifiedTime}
+              value={notifiedTime}
               onChange={setNotifiedTime}
               options={notifyTimeOptions}
               placeholder={"Notify me before"}
@@ -98,7 +107,7 @@ const TaskLayout: React.FC<Props> = ({
           <p className="err-msg" ref={errMsgRef} style={{ marginTop: "40px" }} />
           <div className="spinner-button">
             <SpinnerButton
-              text={"Create Task"}
+              text={buttonText}
               buttonColor={"#0cc1e0"}
               buttonHoverColor={"#128da5"}
               isLoading={loading}

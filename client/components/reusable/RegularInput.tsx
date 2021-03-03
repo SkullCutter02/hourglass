@@ -8,6 +8,7 @@ interface Props {
   height?: number;
   margin?: number;
   required?: boolean;
+  defaultValue?: string;
 }
 
 const RegularInput: React.FC<Props> = ({
@@ -18,10 +19,17 @@ const RegularInput: React.FC<Props> = ({
   height = 40,
   margin = 0,
   required = true,
+  defaultValue = "",
 }) => {
   return (
     <React.Fragment>
-      <input type={inputType} placeholder={placeholder} name={name} required={required} />
+      <input
+        type={inputType}
+        placeholder={placeholder}
+        name={name}
+        required={required}
+        defaultValue={defaultValue}
+      />
 
       <style jsx>{`
         input {
