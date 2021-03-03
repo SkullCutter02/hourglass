@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { format, formatDistanceToNow, isPast, parseISO, formatDistance } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight, faPencilAlt, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -53,20 +53,27 @@ const Task: React.FC<Props> = ({ task }) => {
           <p>{task.description}</p>
         </div>
         <div className="tasks-grid-item">
-          <p style={{ color: isPast(parseISO(task.dueDate)) ? "#b10909" : "#000000" }}>
-            {isPast(parseISO(task.dueDate))
-              ? "Due already!"
-              : `in ${formatDistanceToNow(parseISO(task.dueDate))}`}
-            {canEdit && (
-              <Link href={`/dashboard/project/${uuid}/edit/${task.uuid}`}>
-                <FontAwesomeIcon
-                  icon={faPencilAlt}
-                  color={"grey"}
-                  style={{ marginLeft: "20px", cursor: "pointer" }}
-                />
-              </Link>
-            )}
-          </p>
+          <div className="due-date">
+            <p style={{ color: isPast(parseISO(task.dueDate)) ? "#b10909" : "#000000" }}>
+              {isPast(parseISO(task.dueDate))
+                ? "Due already!"
+                : `in ${formatDistanceToNow(parseISO(task.dueDate))}`}
+            </p>
+            <div className="icons">
+              {canEdit && (
+                <Link href={`/dashboard/project/${uuid}/edit/${task.uuid}`}>
+                  <span className="icon">
+                    <FontAwesomeIcon icon={faPencilAlt} color={"grey"} />
+                  </span>
+                </Link>
+              )}
+              {canEdit && (
+                <span className="icon">
+                  <FontAwesomeIcon icon={faCheckDouble} color={"#56dd0f"} />
+                </span>
+              )}
+            </div>
+          </div>
           <p className="hidden">{format(parseISO(task.dueDate), "MM/dd/yyyy h:mma").toLowerCase()}</p>
           <p className="hidden">
             Notify me before:{" "}
@@ -94,6 +101,22 @@ const Task: React.FC<Props> = ({ task }) => {
 
         .expanded-tasks-grid .hidden {
           display: block;
+        }
+
+        .due-date {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+        }
+
+        .icons {
+          margin-right: 10px;
+          display: flex;
+        }
+
+        .icon {
+          margin: 0 5px;
+          cursor: pointer;
         }
       `}</style>
     </React.Fragment>
