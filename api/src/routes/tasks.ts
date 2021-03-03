@@ -223,6 +223,7 @@ router.delete("/:taskUuid", verifyToken(), async (req: Request, res: Response) =
       }
 
       client.del(`projects_${task.category.project.uuid}`);
+      await deleteNotification(task);
       await task.remove();
       return res.json({ msg: "Task successfully deleted" });
     } else {
