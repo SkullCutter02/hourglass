@@ -11,7 +11,6 @@ import { CategoryType } from "../../types/CategoryType";
 import Spinner from "../reusable/Spinner";
 import { requestPermission } from "../../utils/requestPermission";
 import { urlBase64ToUint8Array } from "../../utils/urlBase64ToUInt8Array";
-import task from "../../pages/dashboard/project/[uuid]/create/task";
 
 const EditTaskContainer: React.FC = () => {
   const router = useRouter();
