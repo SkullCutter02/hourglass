@@ -28,17 +28,12 @@ app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/projects/", limiter);
-app.use("/categories/", limiter);
-app.use("/tasks/", limiter);
-app.use("/users/", limiter);
-
 app.use("/auth", require("./routes/auth"));
-app.use("/projects", require("./routes/projects"));
-app.use("/projects/members", require("./routes/projects/members"));
-app.use("/categories", require("./routes/categories"));
-app.use("/tasks", require("./routes/tasks"));
-app.use("/users", require("./routes/users"));
+app.use("/projects", require("./routes/projects"), limiter);
+app.use("/projects/members", require("./routes/projects/members"), limiter);
+app.use("/categories", require("./routes/categories"), limiter);
+app.use("/tasks", require("./routes/tasks"), limiter);
+app.use("/users", require("./routes/users"), limiter);
 
 createConnection()
   .then(async () => {
