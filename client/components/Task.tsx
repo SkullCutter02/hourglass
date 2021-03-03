@@ -113,6 +113,7 @@ const Task: React.FC<Props> = ({ task }) => {
           word-wrap: initial;
           overflow: initial;
           text-overflow: initial;
+          margin-right: 10px;
         }
 
         .hidden {
