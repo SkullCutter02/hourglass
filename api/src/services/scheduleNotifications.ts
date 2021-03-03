@@ -1,9 +1,13 @@
-import { scheduleJob } from "node-schedule";
+import { scheduleJob, scheduledJobs } from "node-schedule";
 import { PushSubscription, sendNotification } from "web-push";
 import isDatePast from "../utils/isDatePast";
 
 import Schedule from "../entity/Schedule";
 import Task from "../entity/Task";
+
+export function getNotifications() {
+  return scheduledJobs;
+}
 
 export async function scheduleNotification(date: Date, task: Task, subscription: PushSubscription) {
   try {
@@ -31,6 +35,21 @@ export async function rescheduleNotifications() {
         await schedule.remove();
       });
     });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function deleteNotification(uuid: string) {
+  try {
+    const schedule = await Schedule.findOneOrFail({ uuid });
+    const jobs = getNotifications();
+    const currentJob = jobs[uuid];
+
+    if (!currentJob) throw new Error("Job not found!");
+
+    await schedule.remove();
+    currentJob.cancel();
   } catch (err) {
     throw err;
   }

@@ -44,7 +44,7 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
     }
   };
 
-  useOutsideClick(() => togglePopup(true), mainBtnRef);
+  useOutsideClick(() => togglePopup(true), mainBtnRef, popupRef);
 
   const toggleForm = () => {
     if (formRef.current.style.display === "none") {
