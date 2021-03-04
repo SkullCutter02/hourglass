@@ -4,7 +4,7 @@ COPY ./package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-RUN npm run prune --production
+RUN npm prune --production
 
 FROM node:alpine
 WORKDIR /usr/local/app
