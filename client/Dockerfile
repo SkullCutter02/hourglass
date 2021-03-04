@@ -14,4 +14,4 @@ COPY --from=builder /usr/local/app/.next ./.next
 COPY --from=builder /usr/local/app/public ./public
 COPY --from=builder /usr/local/app/styles.css ./styles.css
 EXPOSE 3000
-RUN npm run start
+CMD npm run start
