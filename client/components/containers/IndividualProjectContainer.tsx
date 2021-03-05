@@ -232,6 +232,10 @@ const IndividualProjectContainer: React.FC = () => {
           justify-content: space-between;
         }
 
+        .project-info h1 {
+          white-space: pre;
+        }
+
         .project-info > div {
           width: 100%;
           display: flex;
