@@ -12,6 +12,14 @@ body {
   font-family: var(--font-family);
 }
 
+.linkified {
+  color: #096fc6;
+}
+
+.linkified:hover {
+  color: #0a477e;
+}
+
 textarea {
   font-family: var(--font-family);
   line-height: 1.5em;

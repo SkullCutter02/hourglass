@@ -5,6 +5,8 @@ import { faCaretRight, faPencilAlt, faCheckDouble } from "@fortawesome/free-soli
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useQueryClient } from "react-query";
+import linkifyHtml from "linkifyjs/html";
+import DOMPurify from "dompurify";
 
 import { TaskType } from "../types/TaskType";
 
@@ -72,7 +74,17 @@ const Task: React.FC<Props> = ({ task }) => {
           </p>
         </div>
         <div className="tasks-grid-item">
-          <p>{task.description}</p>
+          <p
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(
+                linkifyHtml(task.description, {
+                  defaultProtocol: "https",
+                  target: { url: "_blank" },
+                }),
+                { ADD_ATTR: ["target"] }
+              ),
+            }}
+          />
         </div>
         <div className="tasks-grid-item">
           <div className="due-date">
