@@ -14,7 +14,9 @@ export const authSignUpSchema = yup.object({
   password: yup
     .string()
     .matches(passwordRegex, {
-      message: "Password must contain at least one uppercase letter, one lowercase letter and one number",
+      message:
+        "Password must be at least 8 characters long, and contain at least one uppercase letter, " +
+        "one lowercase letter and one number",
     })
     .required(),
 });
@@ -33,7 +35,9 @@ export const authResetPassSchema = yup.object({
   password: yup
     .string()
     .matches(passwordRegex, {
-      message: "Password must contain at least one uppercase letter, one lowercase letter and one number",
+      message:
+        "Password must be at least 8 characters long, and contain at least one uppercase letter, " +
+        "one lowercase letter and one number",
     })
     .required(),
 });
