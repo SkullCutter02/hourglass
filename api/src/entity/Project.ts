@@ -22,6 +22,8 @@ export default class Project extends Model {
   @OneToMany(() => ProjectRequest, (projectRequest) => projectRequest.project)
   projectRequests: ProjectRequest[];
 
-  @OneToMany(() => Category, (category) => category.project)
+  @OneToMany(() => Category, (category) => category.project, {
+    onDelete: "CASCADE",
+  })
   categories: Category[];
 }
