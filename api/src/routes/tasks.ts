@@ -29,7 +29,7 @@ router.get("/category/:categoryUuid", async (req: Request, res: Response) => {
   try {
     const category = await Category.findOneOrFail(
       { uuid: req.params.categoryUuid },
-      { relations: ["tasks"] }
+      { relations: ["tasks", "tasks.category"] }
     );
     return res.json(category);
   } catch (err) {
