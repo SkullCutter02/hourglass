@@ -12,7 +12,9 @@ export default class Category extends Model {
   @Column()
   color: string;
 
-  @ManyToOne(() => Project, (project) => project.categories)
+  @ManyToOne(() => Project, (project) => project.categories, {
+    onDelete: "CASCADE",
+  })
   project: Project;
 
   @OneToMany(() => Task, (task) => task.category, {
