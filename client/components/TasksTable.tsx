@@ -8,9 +8,10 @@ type FilterType = "A-Z" | "Z-A" | "nearest due date" | "furthest due date" | und
 interface Props {
   tasks: TaskType[];
   filterType: FilterType;
+  marginBottom?: number;
 }
 
-const TasksTable: React.FC<Props> = ({ tasks, filterType }) => {
+const TasksTable: React.FC<Props> = ({ tasks, filterType, marginBottom = 0 }) => {
   const [currentFilter, setCurrentFilter] = useState<FilterType>(filterType);
 
   useEffect(() => {
@@ -55,6 +56,7 @@ const TasksTable: React.FC<Props> = ({ tasks, filterType }) => {
           width: 100%;
           overflow: scroll;
           box-shadow: 0 0 3px #808080;
+          margin-bottom: ${marginBottom}px;
         }
 
         .topbar {

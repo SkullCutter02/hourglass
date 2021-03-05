@@ -209,7 +209,11 @@ const IndividualProjectContainer: React.FC = () => {
               )
             ) : null}
             <TasksTableHeader tasks={groupTasks(data, true)} text={"These tasks are due: "} />
-            <TasksTableHeader tasks={groupTasks(data, false)} text={"Upcoming tasks: "} />
+            <TasksTableHeader
+              tasks={groupTasks(data, false)}
+              text={"Upcoming tasks: "}
+              taskTableMarginBottom={100}
+            />
           </div>
         </div>
       ) : (

@@ -14,6 +14,7 @@ interface Props {
   color?: string;
   editable?: boolean;
   isSourceCategory?: boolean;
+  taskTableMarginBottom?: number;
 }
 
 const TasksTableHeader: React.FC<Props> = ({
@@ -22,6 +23,7 @@ const TasksTableHeader: React.FC<Props> = ({
   color,
   editable = false,
   isSourceCategory = false,
+  taskTableMarginBottom,
 }) => {
   const [selectedOption, setSelectedOption] = useState<OptionTypeBase | null>(null);
   const [editNameMode, setEditNameMode] = useState<boolean>(true);
@@ -118,7 +120,7 @@ const TasksTableHeader: React.FC<Props> = ({
           )}
         </span>
       </div>
-      <TasksTable tasks={tasks} filterType={selectedOption?.value} />
+      <TasksTable tasks={tasks} filterType={selectedOption?.value} marginBottom={taskTableMarginBottom} />
 
       <style jsx>{`
         .container {
