@@ -37,6 +37,7 @@ const IndividualCategoryContainer: React.FC = () => {
             color={data.color}
             editable={true}
             isSourceCategory={true}
+            taskTableMarginBottom={100}
           />
         </div>
       ) : (
