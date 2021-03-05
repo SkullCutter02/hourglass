@@ -3,13 +3,13 @@ import { useRouter } from "next/router";
 import { useQueryClient } from "react-query";
 import { OptionTypeBase } from "react-select";
 
-import { TaskType } from "../types/TaskType";
+import { TaskCategoryType } from "../types/TaskCategoryType";
 import TasksTable from "./TasksTable";
 import Filter from "./reusable/Filter";
 import { useOutsideClick } from "../utils/hooks/useOutsideClick";
 
 interface Props {
-  tasks: TaskType[];
+  tasks: TaskCategoryType[];
   text: string;
   color?: string;
   editable?: boolean;

@@ -8,10 +8,10 @@ import { useQueryClient } from "react-query";
 import linkifyHtml from "linkifyjs/html";
 import DOMPurify from "dompurify";
 
-import { TaskType } from "../types/TaskType";
+import { TaskCategoryType } from "../types/TaskCategoryType";
 
 interface Props {
-  task: TaskType;
+  task: TaskCategoryType;
 }
 
 const Task: React.FC<Props> = ({ task }) => {
@@ -109,7 +109,9 @@ const Task: React.FC<Props> = ({ task }) => {
             </div>
           </div>
           <p className="hidden">{format(parseISO(task.dueDate), "MM/dd/yyyy h:mma").toLowerCase()}</p>
-          {/*<p className="hidden">Category: </p>*/}
+          <p className="hidden">
+            Category: {task.category.name.charAt(0).toUpperCase() + task.category.name.slice(1)}
+          </p>
           <p className="hidden">
             Notify me before:{" "}
             {task.dueDate !== task.notifiedTime
