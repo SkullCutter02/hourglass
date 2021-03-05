@@ -7,4 +7,11 @@ export type TaskType = {
   dueDate: string;
   notifiedTime: string;
   adminOnly: boolean;
+  category: {
+    uuid: string;
+    createdAt: Date;
+    updatedAt: Date;
+    name: string;
+    color: string;
+  };
 };

@@ -6,7 +6,7 @@ import { parseISO } from "date-fns";
 import { subMilliseconds } from "date-fns";
 
 import TaskLayout from "../layout/TaskLayout";
-import { TaskCategoryType } from "../../types/TaskCategoryType";
+import { TaskType } from "../../types/TaskType";
 import { CategoryType } from "../../types/CategoryType";
 import Spinner from "../reusable/Spinner";
 import { requestPermission } from "../../utils/requestPermission";
@@ -48,7 +48,7 @@ const EditTaskContainer: React.FC = () => {
     return await res.json();
   };
 
-  const { isLoading, isError, error, data } = useQuery<TaskCategoryType, Error>(
+  const { isLoading, isError, error, data } = useQuery<TaskType, Error>(
     ["task", taskUuid],
     () => fetchTask(),
     {

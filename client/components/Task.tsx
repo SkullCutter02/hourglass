@@ -8,10 +8,10 @@ import { useQueryClient } from "react-query";
 import linkifyHtml from "linkifyjs/html";
 import DOMPurify from "dompurify";
 
-import { TaskCategoryType } from "../types/TaskCategoryType";
+import { TaskType } from "../types/TaskType";
 
 interface Props {
-  task: TaskCategoryType;
+  task: TaskType;
 }
 
 const Task: React.FC<Props> = ({ task }) => {
