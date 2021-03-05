@@ -204,6 +204,7 @@ const ViewMembers: React.FC<Props> = ({ project }) => {
           max-height: 320px;
           overflow: scroll;
           opacity: 95%;
+          z-index: 50;
         }
 
         .popup p {
