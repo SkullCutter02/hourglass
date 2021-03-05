@@ -14,6 +14,7 @@ body {
 
 textarea {
   font-family: var(--font-family);
+  line-height: 1.5em;
 }
 
 textarea::-webkit-input-placeholder {
