@@ -10,7 +10,7 @@ export default class Project extends Model {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @OneToMany(() => ProjectMembers, (projectMembers) => projectMembers.project, {

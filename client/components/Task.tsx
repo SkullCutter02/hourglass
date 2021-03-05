@@ -109,6 +109,7 @@ const Task: React.FC<Props> = ({ task }) => {
             </div>
           </div>
           <p className="hidden">{format(parseISO(task.dueDate), "MM/dd/yyyy h:mma").toLowerCase()}</p>
+          {/*<p className="hidden">Category: </p>*/}
           <p className="hidden">
             Notify me before:{" "}
             {task.dueDate !== task.notifiedTime
