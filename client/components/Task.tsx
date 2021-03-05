@@ -123,7 +123,7 @@ const Task: React.FC<Props> = ({ task }) => {
       <style jsx>{`
         .expanded-tasks-grid p {
           white-space: initial;
-          word-wrap: initial;
+          word-wrap: break-word;
           overflow: initial;
           text-overflow: initial;
           margin-right: 10px;
