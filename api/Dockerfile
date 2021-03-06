@@ -9,6 +9,7 @@ FROM node:alpine
 WORKDIR /usr/local/app
 COPY package*.json ./
 RUN npm install --only=production
+RUN npm install ts-node
 COPY --from=builder /usr/local/app/build ./build
 COPY --from=builder /usr/local/app/ormconfig.js ./
 ENV NODE_ENV=production
