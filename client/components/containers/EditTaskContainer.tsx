@@ -23,6 +23,7 @@ const EditTaskContainer: React.FC = () => {
   const [options, setOptions] = useState<{ value: string; label: string }[]>(null);
   const [notifiedTime, setNotifiedTime] = useState<OptionTypeBase>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [hasDueDate, setHasDueDate] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchCategories = async (): Promise<CategoryType[]> => {
@@ -173,6 +174,8 @@ const EditTaskContainer: React.FC = () => {
             defaultDescription={data.description}
             header={"Update Task"}
             selectPlaceholder={"Reschedule notification"}
+            hasDueDate={hasDueDate}
+            setHasDueDate={setHasDueDate}
           />
         )
       )}

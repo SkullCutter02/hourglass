@@ -15,6 +15,8 @@ interface Props {
   isLoading: boolean;
   notifiedTime: OptionTypeBase;
   setNotifiedTime: React.Dispatch<React.SetStateAction<OptionTypeBase>>;
+  hasDueDate: boolean;
+  setHasDueDate: React.Dispatch<React.SetStateAction<boolean>>;
   errMsgRef: React.MutableRefObject<HTMLParagraphElement>;
   loading: boolean;
   options: { value: string; label: string }[];
@@ -42,6 +44,8 @@ const TaskLayout: React.FC<Props> = ({
   defaultDescription,
   header,
   selectPlaceholder,
+  hasDueDate,
+  setHasDueDate,
 }) => {
   const notifyTimeOptions = [
     { value: 0, label: "No Notification" },
@@ -77,7 +81,16 @@ const TaskLayout: React.FC<Props> = ({
               placeholder={"Due date for this task: "}
               fullWidth
               disablePast
+              disabled={!hasDueDate}
             />
+            <div className="no-due-date">
+              <p>No due date: </p>
+              <input
+                type="checkbox"
+                checked={!hasDueDate}
+                onClick={() => setHasDueDate((prevState) => !prevState)}
+              />
+            </div>
           </div>
         </div>
         <div className="form-section below-form-section">
@@ -100,6 +113,7 @@ const TaskLayout: React.FC<Props> = ({
               placeholder={selectPlaceholder}
               className={"task-select"}
               isSearchable={false}
+              isDisabled={!hasDueDate}
             />
           </div>
           <div className="admin-only">
@@ -152,19 +166,26 @@ const TaskLayout: React.FC<Props> = ({
           margin-top: 30px;
         }
 
-        .admin-only {
+        .admin-only,
+        .no-due-date {
           font-size: 0.9rem;
           display: flex;
           align-items: center;
         }
 
-        .admin-only p {
+        .admin-only p,
+        .no-due-date p {
           margin-right: 10px;
         }
 
-        .admin-only input {
+        .admin-only input,
+        .no-due-date input {
           width: 15px;
           height: 15px;
+        }
+
+        .no-due-date {
+          margin-top: 20px;
         }
 
         @media screen and (max-width: 850px) {

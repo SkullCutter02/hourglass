@@ -20,6 +20,7 @@ const CreateTaskContainer: React.FC = () => {
   const [options, setOptions] = useState<{ value: string; label: string }[]>(null);
   const [notifiedTime, setNotifiedTime] = useState<OptionTypeBase>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [hasDueDate, setHasDueDate] = useState<boolean>(true);
 
   const fetchCategories = async () => {
     const res = await fetch(`/api/categories/${uuid}`);
@@ -147,6 +148,8 @@ const CreateTaskContainer: React.FC = () => {
       buttonText={"Create Task"}
       header={"Create new Task"}
       selectPlaceholder={"Notify me before"}
+      hasDueDate={hasDueDate}
+      setHasDueDate={setHasDueDate}
     />
   );
 };
