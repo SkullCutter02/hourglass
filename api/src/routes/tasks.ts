@@ -66,10 +66,11 @@ router.post(
         adminOnly,
         categoryUuid,
         subscription,
+        noDueDate,
       }: TypeOf<typeof postTaskSchema> = req.body;
       const authData: AuthDataType = res.locals.authData;
 
-      if (!isDatePast(dueDate)) {
+      if (!isDatePast(dueDate) || noDueDate) {
         const project = await Project.findOneOrFail(
           { uuid: projectUuid },
           { relations: ["projectMembers", "projectMembers.user"] }
@@ -88,12 +89,13 @@ router.post(
             adminOnly: adminOnly ? adminOnly : false,
             notifiedTime,
             category,
+            noDueDate,
           });
 
           client.del(`projects_${project.uuid}`);
           await task.save();
 
-          if (subscription !== null) {
+          if (subscription !== null && !noDueDate) {
             await scheduleNotification(notifiedTime, task, subscription);
           }
 

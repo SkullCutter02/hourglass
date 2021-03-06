@@ -20,6 +20,9 @@ export default class Task extends Model {
   @Column({ default: false })
   adminOnly: boolean;
 
+  @Column()
+  noDueDate: boolean;
+
   @ManyToOne(() => Category, (category) => category.tasks, {
     onDelete: "CASCADE",
   })

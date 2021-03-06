@@ -7,6 +7,7 @@ export type TaskType = {
   dueDate: string;
   notifiedTime: string;
   adminOnly: boolean;
+  noDueDate: boolean;
   category: {
     uuid: string;
     createdAt: Date;

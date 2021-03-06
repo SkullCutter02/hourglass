@@ -32,6 +32,7 @@ export type ProjectType = {
       dueDate: string;
       notifiedTime: Date;
       adminOnly: boolean;
+      noDueDate: boolean;
     }[];
   }[];
 };
