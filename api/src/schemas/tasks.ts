@@ -19,4 +19,5 @@ export const patchTaskSchema = yup.object({
   adminOnly: yup.boolean(),
   categoryUuid: yup.string().uuid(),
   subscription: yup.mixed(),
+  noDueDate: yup.boolean().required(),
 });

@@ -116,12 +116,14 @@ const Task: React.FC<Props> = ({ task }) => {
           <p className="hidden">
             Category: {task.category.name.charAt(0).toUpperCase() + task.category.name.slice(1)}
           </p>
-          <p className="hidden">
-            Notify me before:{" "}
-            {task.dueDate !== task.notifiedTime
-              ? formatDistance(parseISO(task.dueDate), parseISO(task.notifiedTime))
-              : "None"}
-          </p>
+          {!task.noDueDate && (
+            <p className="hidden">
+              Notify me before:{" "}
+              {task.dueDate !== task.notifiedTime
+                ? formatDistance(parseISO(task.dueDate), parseISO(task.notifiedTime))
+                : "None"}
+            </p>
+          )}
           {task.adminOnly && <p className="hidden">Admin Only</p>}
         </div>
       </div>

@@ -124,10 +124,11 @@ router.patch("/:taskUuid", verifyToken(), async (req: Request, res: Response) =>
       adminOnly,
       categoryUuid,
       subscription,
+      noDueDate,
     }: TypeOf<typeof patchTaskSchema> = req.body;
     const authData: AuthDataType = res.locals.authData;
 
-    if (!isDatePast(dueDate)) {
+    if (!isDatePast(dueDate) || noDueDate) {
       const task = await Task.findOneOrFail(
         { uuid: taskUuid },
         {
@@ -164,8 +165,9 @@ router.patch("/:taskUuid", verifyToken(), async (req: Request, res: Response) =>
         task.description = description || task.description;
         task.dueDate = dueDate || task.dueDate;
         task.notifiedTime = notifiedTime || task.notifiedTime;
-        task.adminOnly = adminOnly || task.adminOnly;
+        task.adminOnly = adminOnly;
         task.category = category || task.category;
+        task.noDueDate = noDueDate;
 
         if (notifiedTime && notifiedTime == task.dueDate) {
           await deleteNotification(task);

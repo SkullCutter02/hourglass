@@ -70,20 +70,20 @@ const EditTaskContainer: React.FC = () => {
     try {
       setLoading(true);
 
-      if (!dueDate) {
+      if (!dueDate && hasDueDate) {
         errMsgRef.current.textContent = "Due date field cannot be empty";
         setLoading(false);
         return;
       }
 
-      if (!("Notification" in window) && notifiedTime?.value !== 0) {
+      if (!("Notification" in window) && notifiedTime?.value !== 0 && hasDueDate) {
         errMsgRef.current.textContent =
           "Notifications are not supported in your browser. The notify me feature will not work";
         setLoading(false);
         return;
       }
 
-      if (!("serviceWorker" in navigator) && notifiedTime?.value !== 0) {
+      if (!("serviceWorker" in navigator) && notifiedTime?.value !== 0 && hasDueDate) {
         errMsgRef.current.textContent =
           "Service workers are not supported in your browser. The notify me feature will not work";
         setLoading(false);
@@ -121,11 +121,13 @@ const EditTaskContainer: React.FC = () => {
         body: JSON.stringify({
           name: e.target.name.value,
           description: e.target.description.value,
-          dueDate: dueDate,
-          notifiedTime: notifiedTime !== null ? subMilliseconds(dueDate, notifiedTime.value) : null,
+          dueDate: hasDueDate ? dueDate : new Date(Date.now()),
+          notifiedTime:
+            notifiedTime !== null && hasDueDate ? subMilliseconds(dueDate, notifiedTime.value) : null,
           adminOnly: e.target.adminOnly.checked,
           categoryUuid: category.value,
-          subscription: permission && notifiedTime?.value !== 0 ? subscription : null,
+          subscription: permission && notifiedTime?.value !== 0 && hasDueDate ? subscription : null,
+          noDueDate: !hasDueDate,
         }),
       });
       const data = await res.json();
