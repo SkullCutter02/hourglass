@@ -7,9 +7,9 @@ module.exports = {
   database: process.env.PGDATABASE,
   synchronize: false,
   logging: process.env.NODE_ENV === "development",
-  entities: ["src/entity/**/*.ts", __dirname + "/build/entity/**/*.js"],
-  migrations: ["src/migration/**/*.ts", __dirname + "/build/migration/**/*.js"],
-  subscribers: ["src/subscriber/**/*.ts", __dirname + "/build/subscriber/**/*.js"],
+  entities: ["src/entity/**/*.ts", "build/entity/**/*.js"],
+  migrations: ["src/migration/**/*.ts", "build/migration/**/*.js"],
+  subscribers: ["src/subscriber/**/*.ts", "build/subscriber/**/*.js"],
   cli: {
     entitiesDir: "src/entity",
     migrationsDir: "src/migration",

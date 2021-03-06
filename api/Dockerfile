@@ -14,4 +14,4 @@ COPY --from=builder /usr/local/app/build ./build
 COPY --from=builder /usr/local/app/ormconfig.js ./
 ENV NODE_ENV=production
 EXPOSE 5000
-CMD npm start && npm run typeorm migration:run
+CMD npm run typeorm migration:run && npm start
