@@ -12,6 +12,7 @@ interface Props {
   iconSize?: number;
   onClick?: () => void;
   link?: string;
+  marginLeft?: number;
 }
 
 const AddButton: React.FC<Props> = ({
@@ -23,18 +24,19 @@ const AddButton: React.FC<Props> = ({
   iconSize = 10,
   onClick,
   link,
+  marginLeft = 20,
 }) => {
   return (
     <React.Fragment>
       {link ? (
         <Link href={link}>
           <button onClick={onClick}>
-            <FontAwesomeIcon icon={faPlus} height={iconSize} /> {text}
+            <FontAwesomeIcon icon={faPlus} height={iconSize} style={{ marginRight: "5px" }} /> <p>{text}</p>
           </button>
         </Link>
       ) : (
         <button onClick={onClick}>
-          <FontAwesomeIcon icon={faPlus} height={iconSize} /> {text}
+          <FontAwesomeIcon icon={faPlus} height={iconSize} style={{ marginRight: "5px" }} /> <p>{text}</p>
         </button>
       )}
 
@@ -48,7 +50,9 @@ const AddButton: React.FC<Props> = ({
           color: ${textColor};
           transition: background 0.3s ease;
           font-size: ${textSize}px;
-          margin-left: 20px;
+          margin-left: ${marginLeft}px;
+          display: flex;
+          align-items: center;
         }
 
         button:hover {

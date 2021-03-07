@@ -9,7 +9,7 @@ const DashboardContainer: React.FC = () => {
         <h1>Welcome to your Dashboard!</h1>
         <div className="arrow-btn-container">
           <ArrowButton
-            text={"Create new Project"}
+            text={"New Project"}
             buttonColor={"#658aa2"}
             buttonHoverColor={"#526c7c"}
             textColor={"#fff"}

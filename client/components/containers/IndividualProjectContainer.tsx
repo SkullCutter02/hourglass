@@ -165,13 +165,13 @@ const IndividualProjectContainer: React.FC = () => {
               <div>
                 <ViewMembers project={data} />
                 <AddButton
-                  text={"Create New Category"}
+                  text={"New Category"}
                   buttonColor={"#3fb820"}
                   buttonHoverColor={"#207a11"}
                   link={`/dashboard/project/${data.uuid}/create/category`}
                 />
                 <AddButton
-                  text={"Create New Task"}
+                  text={"New Task"}
                   buttonColor={"#25b2c1"}
                   buttonHoverColor={"#137c7c"}
                   onClick={() => createTask()}
