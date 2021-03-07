@@ -59,10 +59,7 @@ const EditTaskContainer: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      if (data.noDueDate) {
-        setDueDate(parseISO(data.dueDate));
-      }
-
+      setDueDate(parseISO(data.dueDate));
       setCategory({ value: data.category.uuid, label: data.category.name });
       setHasDueDate(!data.noDueDate);
     }
@@ -108,7 +105,12 @@ const EditTaskContainer: React.FC = () => {
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_KEY),
         });
-      } else if (notifiedTime?.value !== 0 && hasDueDate && data.notifiedTime !== data.dueDate) {
+      } else if (
+        notifiedTime?.value !== 0 &&
+        hasDueDate &&
+        data.notifiedTime !== data.dueDate &&
+        notifiedTime !== null
+      ) {
         errMsgRef.current.textContent = "You have denied notifications. The notify me feature will not work";
         setLoading(false);
         return;
