@@ -48,9 +48,9 @@ const IndividualProjectContainer: React.FC = () => {
 
     return tasks.filter((task) => {
       if (calculatePast) {
-        return isPast(parseISO(task.dueDate));
+        return isPast(parseISO(task.dueDate)) && !task.noDueDate;
       } else {
-        return !isPast(parseISO(task.dueDate));
+        return !isPast(parseISO(task.dueDate)) || task.noDueDate;
       }
     });
   };

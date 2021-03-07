@@ -88,8 +88,10 @@ const Task: React.FC<Props> = ({ task }) => {
         </div>
         <div className="tasks-grid-item">
           <div className="due-date">
-            <p style={{ color: isPast(parseISO(task.dueDate)) ? "#b10909" : "#000000" }}>
-              {isPast(parseISO(task.dueDate))
+            <p style={{ color: isPast(parseISO(task.dueDate)) && !task.noDueDate ? "#b10909" : "#000000" }}>
+              {task.noDueDate
+                ? "No due date"
+                : isPast(parseISO(task.dueDate))
                 ? "Due already!"
                 : `in ${formatDistanceToNow(parseISO(task.dueDate))}`}
             </p>
@@ -108,16 +110,20 @@ const Task: React.FC<Props> = ({ task }) => {
               )}
             </div>
           </div>
-          <p className="hidden">{format(parseISO(task.dueDate), "MM/dd/yyyy h:mma").toLowerCase()}</p>
+          {!task.noDueDate && (
+            <p className="hidden">{format(parseISO(task.dueDate), "MM/dd/yyyy h:mma").toLowerCase()}</p>
+          )}
           <p className="hidden">
             Category: {task.category.name.charAt(0).toUpperCase() + task.category.name.slice(1)}
           </p>
-          <p className="hidden">
-            Notify me before:{" "}
-            {task.dueDate !== task.notifiedTime
-              ? formatDistance(parseISO(task.dueDate), parseISO(task.notifiedTime))
-              : "None"}
-          </p>
+          {!task.noDueDate && (
+            <p className="hidden">
+              Notify me before:{" "}
+              {task.dueDate !== task.notifiedTime
+                ? formatDistance(parseISO(task.dueDate), parseISO(task.notifiedTime))
+                : "None"}
+            </p>
+          )}
           {task.adminOnly && <p className="hidden">Admin Only</p>}
         </div>
       </div>

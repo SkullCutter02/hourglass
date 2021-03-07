@@ -66,10 +66,11 @@ router.post(
         adminOnly,
         categoryUuid,
         subscription,
+        noDueDate,
       }: TypeOf<typeof postTaskSchema> = req.body;
       const authData: AuthDataType = res.locals.authData;
 
-      if (!isDatePast(dueDate)) {
+      if (!isDatePast(dueDate) || noDueDate) {
         const project = await Project.findOneOrFail(
           { uuid: projectUuid },
           { relations: ["projectMembers", "projectMembers.user"] }
@@ -88,12 +89,13 @@ router.post(
             adminOnly: adminOnly ? adminOnly : false,
             notifiedTime,
             category,
+            noDueDate,
           });
 
           client.del(`projects_${project.uuid}`);
           await task.save();
 
-          if (subscription !== null) {
+          if (subscription !== null && !noDueDate) {
             await scheduleNotification(notifiedTime, task, subscription);
           }
 
@@ -122,10 +124,11 @@ router.patch("/:taskUuid", verifyToken(), async (req: Request, res: Response) =>
       adminOnly,
       categoryUuid,
       subscription,
+      noDueDate,
     }: TypeOf<typeof patchTaskSchema> = req.body;
     const authData: AuthDataType = res.locals.authData;
 
-    if (!isDatePast(dueDate)) {
+    if (!isDatePast(dueDate) || noDueDate) {
       const task = await Task.findOneOrFail(
         { uuid: taskUuid },
         {
@@ -162,8 +165,9 @@ router.patch("/:taskUuid", verifyToken(), async (req: Request, res: Response) =>
         task.description = description || task.description;
         task.dueDate = dueDate || task.dueDate;
         task.notifiedTime = notifiedTime || task.notifiedTime;
-        task.adminOnly = adminOnly || task.adminOnly;
+        task.adminOnly = adminOnly;
         task.category = category || task.category;
+        task.noDueDate = noDueDate;
 
         if (notifiedTime && notifiedTime == task.dueDate) {
           await deleteNotification(task);

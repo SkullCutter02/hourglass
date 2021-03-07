@@ -15,6 +15,8 @@ interface Props {
   isLoading: boolean;
   notifiedTime: OptionTypeBase;
   setNotifiedTime: React.Dispatch<React.SetStateAction<OptionTypeBase>>;
+  hasDueDate: boolean;
+  setHasDueDate: React.Dispatch<React.SetStateAction<boolean>>;
   errMsgRef: React.MutableRefObject<HTMLParagraphElement>;
   loading: boolean;
   options: { value: string; label: string }[];
@@ -23,6 +25,7 @@ interface Props {
   defaultDescription?: string;
   header: string;
   selectPlaceholder: string;
+  adminOnlyChecked?: boolean;
 }
 
 const TaskLayout: React.FC<Props> = ({
@@ -42,6 +45,9 @@ const TaskLayout: React.FC<Props> = ({
   defaultDescription,
   header,
   selectPlaceholder,
+  hasDueDate,
+  setHasDueDate,
+  adminOnlyChecked = false,
 }) => {
   const notifyTimeOptions = [
     { value: 0, label: "No Notification" },
@@ -76,8 +82,17 @@ const TaskLayout: React.FC<Props> = ({
               onChange={setDueDate}
               placeholder={"Due date for this task: "}
               fullWidth
-              disablePast
+              disablePast={hasDueDate}
+              disabled={!hasDueDate}
             />
+            <div className="no-due-date">
+              <p>No due date: </p>
+              <input
+                type="checkbox"
+                checked={!hasDueDate}
+                onClick={() => setHasDueDate((prevState) => !prevState)}
+              />
+            </div>
           </div>
         </div>
         <div className="form-section below-form-section">
@@ -100,11 +115,12 @@ const TaskLayout: React.FC<Props> = ({
               placeholder={selectPlaceholder}
               className={"task-select"}
               isSearchable={false}
+              isDisabled={!hasDueDate}
             />
           </div>
           <div className="admin-only">
             <p>Admin Only:</p>
-            <input type="checkbox" name={"adminOnly"} />
+            <input type="checkbox" name={"adminOnly"} defaultChecked={adminOnlyChecked} />
           </div>
           <p className="err-msg" ref={errMsgRef} style={{ marginTop: "40px" }} />
           <div className="spinner-button">
@@ -152,19 +168,26 @@ const TaskLayout: React.FC<Props> = ({
           margin-top: 30px;
         }
 
-        .admin-only {
+        .admin-only,
+        .no-due-date {
           font-size: 0.9rem;
           display: flex;
           align-items: center;
         }
 
-        .admin-only p {
+        .admin-only p,
+        .no-due-date p {
           margin-right: 10px;
         }
 
-        .admin-only input {
+        .admin-only input,
+        .no-due-date input {
           width: 15px;
           height: 15px;
+        }
+
+        .no-due-date {
+          margin-top: 20px;
         }
 
         @media screen and (max-width: 850px) {

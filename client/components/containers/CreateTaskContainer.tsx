@@ -20,6 +20,7 @@ const CreateTaskContainer: React.FC = () => {
   const [options, setOptions] = useState<{ value: string; label: string }[]>(null);
   const [notifiedTime, setNotifiedTime] = useState<OptionTypeBase>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [hasDueDate, setHasDueDate] = useState<boolean>(true);
 
   const fetchCategories = async () => {
     const res = await fetch(`/api/categories/${uuid}`);
@@ -53,26 +54,34 @@ const CreateTaskContainer: React.FC = () => {
       setLoading(true);
 
       if (!(category && notifiedTime && dueDate)) {
-        errMsgRef.current.textContent = "Due date, category or notified time fields cannot be empty";
-        setLoading(false);
-        return;
+        if (!hasDueDate && !category) {
+          errMsgRef.current.textContent = "Category field cannot be empty";
+          setLoading(false);
+          return;
+        }
+
+        if (!(category && notifiedTime && dueDate) && hasDueDate) {
+          errMsgRef.current.textContent = "Due date, category or notified time fields cannot be empty";
+          setLoading(false);
+          return;
+        }
       }
 
-      if (!("Notification" in window) && notifiedTime.value !== 0) {
+      if (!("Notification" in window) && notifiedTime?.value !== 0) {
         errMsgRef.current.textContent =
           "Notifications are not supported in your browser. The notify me feature will not work";
         setLoading(false);
         return;
       }
 
-      if (!("serviceWorker" in navigator) && notifiedTime.value !== 0) {
+      if (!("serviceWorker" in navigator) && notifiedTime?.value !== 0) {
         errMsgRef.current.textContent =
           "Service workers are not supported in your browser. The notify me feature will not work";
         setLoading(false);
         return;
       }
 
-      const permission = notifiedTime.value !== 0 ? await requestPermission() : false;
+      const permission = notifiedTime?.value !== 0 ? await requestPermission() : false;
 
       let register: ServiceWorkerRegistration;
       let subscription: PushSubscription;
@@ -86,7 +95,7 @@ const CreateTaskContainer: React.FC = () => {
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_KEY),
         });
-      } else if (notifiedTime.value !== 0) {
+      } else if (notifiedTime?.value !== 0) {
         errMsgRef.current.textContent = "You have denied notifications. The notify me feature will not work";
         setLoading(false);
         return;
@@ -103,11 +112,12 @@ const CreateTaskContainer: React.FC = () => {
         body: JSON.stringify({
           name: e.target.name.value,
           description: e.target.description.value,
-          dueDate: dueDate,
-          notifiedTime: subMilliseconds(dueDate, notifiedTime.value),
+          dueDate: hasDueDate ? dueDate : new Date(Date.now()),
+          notifiedTime: hasDueDate ? subMilliseconds(dueDate, notifiedTime?.value) : new Date(Date.now()),
           adminOnly: e.target.adminOnly.checked,
           categoryUuid: category.value,
-          subscription: permission && notifiedTime.value !== 0 ? subscription : null,
+          subscription: permission && notifiedTime?.value !== 0 && hasDueDate ? subscription : null,
+          noDueDate: !hasDueDate,
         }),
       });
       const data = await res.json();
@@ -147,6 +157,8 @@ const CreateTaskContainer: React.FC = () => {
       buttonText={"Create Task"}
       header={"Create new Task"}
       selectPlaceholder={"Notify me before"}
+      hasDueDate={hasDueDate}
+      setHasDueDate={setHasDueDate}
     />
   );
 };
