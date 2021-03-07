@@ -73,14 +73,14 @@ const CreateTaskContainer: React.FC = () => {
         }
       }
 
-      if (!("Notification" in window) && notifiedTime?.value !== 0) {
+      if (!("Notification" in window) && notifiedTime?.value !== 0 && notifiedTime !== null) {
         errMsgRef.current.textContent =
           "Notifications are not supported in your browser. The notify me feature will not work";
         setLoading(false);
         return;
       }
 
-      if (!("serviceWorker" in navigator) && notifiedTime?.value !== 0) {
+      if (!("serviceWorker" in navigator) && notifiedTime?.value !== 0 && notifiedTime !== null) {
         errMsgRef.current.textContent =
           "Service workers are not supported in your browser. The notify me feature will not work";
         setLoading(false);
