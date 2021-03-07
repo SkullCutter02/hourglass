@@ -6,9 +6,11 @@ import { useRouter } from "next/router";
 
 import { InviteType } from "../types/InviteType";
 import Spinner from "./reusable/Spinner";
+import { useOutsideClick } from "../utils/hooks/useOutsideClick";
 
 const Notification: React.FC = () => {
   const popupRef = useRef<HTMLDivElement>(null);
+  const bellRef = useRef<HTMLDivElement>(null);
   const errMsgRef = useRef<HTMLParagraphElement>(null);
 
   const queryClient = useQueryClient();
@@ -30,6 +32,8 @@ const Notification: React.FC = () => {
       popupRef.current.style.display = "none";
     }
   };
+
+  useOutsideClick(() => togglePopup(true), bellRef, popupRef);
 
   const accept = async (uuid: string) => {
     const res = await fetch(`/api/projects/members/accept/${uuid}`, {
@@ -71,13 +75,10 @@ const Notification: React.FC = () => {
 
   return (
     <React.Fragment>
-      <div
-        className="bell-container"
-        onClick={() => togglePopup(false)}
-        onBlur={() => togglePopup(true)}
-        tabIndex={0}
-      >
-        <FontAwesomeIcon icon={faBell} color={"grey"} height={"40px"} />
+      <div className="bell-container">
+        <div ref={bellRef}>
+          <FontAwesomeIcon icon={faBell} color={"grey"} height={"40px"} onClick={() => togglePopup(false)} />
+        </div>
         {isLoading ? null : isError ? (
           <p>{error.message}</p>
         ) : data?.projectRequests.length > 0 ? (
@@ -134,6 +135,7 @@ const Notification: React.FC = () => {
           cursor: initial;
           min-height: 50px;
           opacity: 95%;
+          z-index: 100000;
         }
 
         .popup p {
