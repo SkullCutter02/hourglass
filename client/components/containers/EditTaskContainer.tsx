@@ -59,7 +59,10 @@ const EditTaskContainer: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      setDueDate(parseISO(data.dueDate));
+      if (data.noDueDate) {
+        setDueDate(parseISO(data.dueDate));
+      }
+
       setCategory({ value: data.category.uuid, label: data.category.name });
       setHasDueDate(!data.noDueDate);
     }
@@ -105,7 +108,7 @@ const EditTaskContainer: React.FC = () => {
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_KEY),
         });
-      } else if (notifiedTime?.value !== 0) {
+      } else if (notifiedTime?.value !== 0 && hasDueDate && data.notifiedTime !== data.dueDate) {
         errMsgRef.current.textContent = "You have denied notifications. The notify me feature will not work";
         setLoading(false);
         return;
@@ -131,11 +134,11 @@ const EditTaskContainer: React.FC = () => {
           noDueDate: !hasDueDate,
         }),
       });
-      const data = await res.json();
+      const jsonedRes = await res.json();
 
       if (!res.ok) {
-        if (data.msg) {
-          errMsgRef.current.textContent = data.msg;
+        if (jsonedRes.msg) {
+          errMsgRef.current.textContent = jsonedRes.msg;
         } else {
           errMsgRef.current.textContent = "Something went wrong. Please try again or reload the page";
         }
