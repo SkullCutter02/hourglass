@@ -108,11 +108,11 @@ const DashboardLayout: React.FC = ({ children }) => {
                 <div style={{ marginBottom: "30px" }}>
                   <Link href={"/dashboard/project/create"}>
                     <ArrowButton
-                      text={"Create new Project"}
+                      text={"New Project"}
                       buttonColor={"#658aa2"}
                       buttonHoverColor={"#526c7c"}
                       textColor={"#fff"}
-                      textSize={8}
+                      textSize={10}
                     />
                   </Link>
                 </div>

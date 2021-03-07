@@ -116,7 +116,7 @@ const TasksTableHeader: React.FC<Props> = ({
           <Filter selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
           {isSourceCategory && (
             <AddButton
-              text={"Create New Task"}
+              text={"New Task"}
               buttonColor={"#25b2c1"}
               buttonHoverColor={"#137c7c"}
               link={`/dashboard/project/${uuid}/create/task?category=${text.toLowerCase()}&cUuid=${categoryUuid}`}
@@ -166,6 +166,7 @@ const TasksTableHeader: React.FC<Props> = ({
           padding: 8px 12px;
           transition: background 0.3s ease;
           margin-left: 20px;
+          font-size: 10px;
         }
 
         .remove-category-btn:hover {
