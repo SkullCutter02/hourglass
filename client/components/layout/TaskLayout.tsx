@@ -25,6 +25,7 @@ interface Props {
   defaultDescription?: string;
   header: string;
   selectPlaceholder: string;
+  adminOnlyChecked?: boolean;
 }
 
 const TaskLayout: React.FC<Props> = ({
@@ -46,6 +47,7 @@ const TaskLayout: React.FC<Props> = ({
   selectPlaceholder,
   hasDueDate,
   setHasDueDate,
+  adminOnlyChecked = false,
 }) => {
   const notifyTimeOptions = [
     { value: 0, label: "No Notification" },
@@ -80,7 +82,7 @@ const TaskLayout: React.FC<Props> = ({
               onChange={setDueDate}
               placeholder={"Due date for this task: "}
               fullWidth
-              disablePast
+              disablePast={hasDueDate}
               disabled={!hasDueDate}
             />
             <div className="no-due-date">
@@ -118,7 +120,7 @@ const TaskLayout: React.FC<Props> = ({
           </div>
           <div className="admin-only">
             <p>Admin Only:</p>
-            <input type="checkbox" name={"adminOnly"} />
+            <input type="checkbox" name={"adminOnly"} defaultChecked={adminOnlyChecked} />
           </div>
           <p className="err-msg" ref={errMsgRef} style={{ marginTop: "40px" }} />
           <div className="spinner-button">

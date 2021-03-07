@@ -61,6 +61,7 @@ const EditTaskContainer: React.FC = () => {
     if (data) {
       setDueDate(parseISO(data.dueDate));
       setCategory({ value: data.category.uuid, label: data.category.name });
+      setHasDueDate(!data.noDueDate);
     }
   }, [data]);
 
@@ -178,6 +179,7 @@ const EditTaskContainer: React.FC = () => {
             selectPlaceholder={"Reschedule notification"}
             hasDueDate={hasDueDate}
             setHasDueDate={setHasDueDate}
+            adminOnlyChecked={data.adminOnly}
           />
         )
       )}
