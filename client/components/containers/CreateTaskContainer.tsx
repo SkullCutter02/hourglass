@@ -95,7 +95,7 @@ const CreateTaskContainer: React.FC = () => {
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_KEY),
         });
-      } else if (notifiedTime?.value !== 0) {
+      } else if (notifiedTime?.value !== 0 && notifiedTime !== null) {
         errMsgRef.current.textContent = "You have denied notifications. The notify me feature will not work";
         setLoading(false);
         return;
