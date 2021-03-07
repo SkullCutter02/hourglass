@@ -11,7 +11,7 @@ import { requestPermission } from "../../utils/requestPermission";
 
 const CreateTaskContainer: React.FC = () => {
   const router = useRouter();
-  const { uuid } = router.query;
+  const { uuid, category: categoryName, cUuid } = router.query;
 
   const errMsgRef = useRef<HTMLParagraphElement>(null);
 
@@ -34,6 +34,12 @@ const CreateTaskContainer: React.FC = () => {
       enabled: !!uuid,
     }
   );
+
+  useEffect(() => {
+    if (cUuid && categoryName) {
+      setCategory({ value: cUuid, label: categoryName });
+    }
+  }, [cUuid, categoryName]);
 
   useEffect(() => {
     if (data !== undefined) {
