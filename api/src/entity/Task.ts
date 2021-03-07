@@ -20,7 +20,7 @@ export default class Task extends Model {
   @Column({ default: false })
   adminOnly: boolean;
 
-  @Column()
+  @Column({ default: false })
   noDueDate: boolean;
 
   @ManyToOne(() => Category, (category) => category.tasks, {
