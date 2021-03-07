@@ -1,10 +1,10 @@
 import * as nodemailer from "nodemailer";
-import * as AWS from "aws-sdk";
+import nodemailerSendgrid from "nodemailer-sendgrid";
 
-const transporter = nodemailer.createTransport({
-  SES: new AWS.SES({
-    apiVersion: "2010-12-01",
-  }),
-});
+const transporter = nodemailer.createTransport(
+  nodemailerSendgrid({
+    apiKey: process.env.SENDGRID_API_KEY,
+  })
+);
 
 export default transporter;

@@ -2,7 +2,6 @@ import "reflect-metadata";
 import { createConnection } from "typeorm";
 import express from "express";
 import cookieParser from "cookie-parser";
-import * as AWS from "aws-sdk";
 import * as webpush from "web-push";
 
 import { limiter } from "./middleware/rateLimit";
@@ -14,12 +13,6 @@ webpush.setVapidDetails(
   process.env.PUBLIC_VAPID_KEY,
   process.env.PRIVATE_VAPID_KEY
 );
-
-AWS.config.update({
-  accessKeyId: process.env.AWS_SES_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SES_SECRET_KEY,
-  region: "us-east-2",
-});
 
 const app: express.Application = express();
 

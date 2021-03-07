@@ -8,9 +8,12 @@ const ForgetPasswordPageContainer: React.FC = () => {
   const errMsgRef = useRef<HTMLParagraphElement>(null);
 
   const [sentEmail, setSentEmail] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const sendEmail = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     const res = await fetch("/api/auth/forgot", {
       method: "POST",
@@ -25,12 +28,15 @@ const ForgetPasswordPageContainer: React.FC = () => {
 
     if (res.ok) {
       setSentEmail(true);
+      setIsLoading(false);
     } else {
       if (data.msg) {
         errMsgRef.current.textContent = data.msg;
       } else {
         errMsgRef.current.textContent = "Something went wrong";
       }
+
+      setIsLoading(false);
     }
   };
 
@@ -44,7 +50,7 @@ const ForgetPasswordPageContainer: React.FC = () => {
             <h1>Enter your email address:</h1>
             <AnimatedInput text={"Email Address"} inputType={"email"} inputRef={emailRef} />
             <p className="err-msg" ref={errMsgRef} />
-            <AuthButton text={"Send"} />
+            <AuthButton text={"Send"} isLoading={isLoading} />
           </React.Fragment>
         </form>
       )}

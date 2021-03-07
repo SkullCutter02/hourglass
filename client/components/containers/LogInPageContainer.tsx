@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useSetRecoilState } from "recoil";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -11,12 +11,16 @@ const LogInPageContainer: React.FC = () => {
   const router = useRouter();
   const setUserState = useSetRecoilState(userState);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const credentialsRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const errMsgRef = useRef<HTMLParagraphElement>(null);
 
   const login = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -39,6 +43,7 @@ const LogInPageContainer: React.FC = () => {
       setUserState(data);
       await router.push("/dashboard");
     } catch (err) {
+      setIsLoading(false);
       errMsgRef.current.textContent = err;
     }
   };
@@ -53,7 +58,7 @@ const LogInPageContainer: React.FC = () => {
           <p className="forget-password">Forgot your password?</p>
         </Link>
         <p className="err-msg" ref={errMsgRef} />
-        <AuthButton text={"Login"} />
+        <AuthButton text={"Login"} isLoading={isLoading} />
       </form>
 
       <style jsx>{`
