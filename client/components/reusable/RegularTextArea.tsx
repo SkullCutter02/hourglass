@@ -7,6 +7,7 @@ interface Props {
   required?: boolean;
   margin?: number;
   defaultValue?: string;
+  maxLength?: number;
 }
 
 const RegularTextArea: React.FC<Props> = ({
@@ -16,10 +17,17 @@ const RegularTextArea: React.FC<Props> = ({
   required = true,
   margin = 0,
   defaultValue = "",
+  maxLength = 4000,
 }) => {
   return (
     <React.Fragment>
-      <textarea placeholder={placeholder} name={name} required={required} defaultValue={defaultValue} />
+      <textarea
+        placeholder={placeholder}
+        name={name}
+        required={required}
+        defaultValue={defaultValue}
+        maxLength={maxLength}
+      />
 
       <style jsx>{`
         textarea {
