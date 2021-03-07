@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useSetRecoilState } from "recoil";
 import { useRouter } from "next/router";
 
@@ -10,6 +10,8 @@ const SignUpPageContainer: React.FC = () => {
   const router = useRouter();
   const setUserState = useSetRecoilState(userState);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const usernameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -18,6 +20,8 @@ const SignUpPageContainer: React.FC = () => {
 
   const signup = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     if (passwordRef.current.value === confirmPasswordRef.current.value) {
       errMsgRef.current.textContent = "";
@@ -51,9 +55,11 @@ const SignUpPageContainer: React.FC = () => {
         await router.push("/dashboard");
       } catch (err) {
         errMsgRef.current.textContent = err;
+        setIsLoading(false);
       }
     } else {
       errMsgRef.current.textContent = "Password values do not match";
+      setIsLoading(false);
     }
   };
 
@@ -71,7 +77,7 @@ const SignUpPageContainer: React.FC = () => {
           inputRef={confirmPasswordRef}
         />
         <p className="err-msg" ref={errMsgRef} />
-        <AuthButton text={"Sign Up"} />
+        <AuthButton text={"Sign Up"} isLoading={isLoading} />
       </form>
 
       <style jsx>{`

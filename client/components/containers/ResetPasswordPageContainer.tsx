@@ -11,6 +11,7 @@ interface Props {
 
 const ResetPasswordPageContainer: React.FC<Props> = ({ uuid }) => {
   const [success, setSuccess] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
@@ -18,6 +19,8 @@ const ResetPasswordPageContainer: React.FC<Props> = ({ uuid }) => {
 
   const resetPassword = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     try {
       if (passwordRef.current.value === confirmPasswordRef.current.value) {
@@ -37,6 +40,7 @@ const ResetPasswordPageContainer: React.FC<Props> = ({ uuid }) => {
 
         if (res.ok) {
           setSuccess(true);
+          setIsLoading(false);
         } else {
           if (data.error) {
             errMsgRef.current.textContent = data.error;
@@ -45,13 +49,17 @@ const ResetPasswordPageContainer: React.FC<Props> = ({ uuid }) => {
           } else {
             errMsgRef.current.textContent = "Something went wrong";
           }
+
+          setIsLoading(false);
         }
       } else {
         errMsgRef.current.textContent = "Password values do not match";
+        setIsLoading(false);
       }
     } catch (err) {
       console.log(err);
       errMsgRef.current.textContent = "Something went wrong";
+      setIsLoading(false);
     }
   };
 
@@ -83,7 +91,7 @@ const ResetPasswordPageContainer: React.FC<Props> = ({ uuid }) => {
             inputRef={confirmPasswordRef}
           />
           <p className="err-msg" ref={errMsgRef} />
-          <AuthButton text={"Reset"} />
+          <AuthButton text={"Reset"} isLoading={isLoading} />
         </form>
       )}
 
