@@ -155,6 +155,7 @@ const DashboardLayout: React.FC = ({ children }) => {
           display: flex;
           width: 100vw;
           min-height: 100vh;
+          position: relative;
         }
 
         .dashboard-main {
@@ -263,8 +264,9 @@ const DashboardLayout: React.FC = ({ children }) => {
             position: absolute;
             top: 0;
             left: 0;
+            bottom: 0;
             z-index: 1;
-            height: 100vh;
+            height: 100%;
             overflow: scroll;
             transform: scaleX(0);
             transform-origin: 0 50%;
