@@ -7,6 +7,7 @@ import { TaskType } from "../types/TaskType";
 import TasksTable from "./TasksTable";
 import Filter from "./reusable/Filter";
 import { useOutsideClick } from "../utils/hooks/useOutsideClick";
+import AddButton from "./reusable/AddButton";
 
 interface Props {
   tasks: TaskType[];
@@ -114,6 +115,14 @@ const TasksTableHeader: React.FC<Props> = ({
         <span>
           <Filter selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
           {isSourceCategory && (
+            <AddButton
+              text={"Create New Task"}
+              buttonColor={"#25b2c1"}
+              buttonHoverColor={"#137c7c"}
+              link={`/dashboard/project/${uuid}/create/task?category=${text.toLowerCase()}&cUuid=${categoryUuid}`}
+            />
+          )}
+          {isSourceCategory && (
             <button className="remove-category-btn" onClick={removeCategory}>
               Remove Category
             </button>
@@ -156,7 +165,7 @@ const TasksTableHeader: React.FC<Props> = ({
           color: #ffffff;
           padding: 8px 12px;
           transition: background 0.3s ease;
-          margin-left: 40px;
+          margin-left: 20px;
         }
 
         .remove-category-btn:hover {

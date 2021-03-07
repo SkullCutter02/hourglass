@@ -9,6 +9,7 @@ interface Props {
   margin?: number;
   required?: boolean;
   defaultValue?: string;
+  maxLength?: number;
 }
 
 const RegularInput: React.FC<Props> = ({
@@ -20,6 +21,7 @@ const RegularInput: React.FC<Props> = ({
   margin = 0,
   required = true,
   defaultValue = "",
+  maxLength = 4000,
 }) => {
   return (
     <React.Fragment>
@@ -29,6 +31,7 @@ const RegularInput: React.FC<Props> = ({
         name={name}
         required={required}
         defaultValue={defaultValue}
+        maxLength={maxLength}
       />
 
       <style jsx>{`

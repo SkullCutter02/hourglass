@@ -11,7 +11,7 @@ import { requestPermission } from "../../utils/requestPermission";
 
 const CreateTaskContainer: React.FC = () => {
   const router = useRouter();
-  const { uuid } = router.query;
+  const { uuid, category: categoryName, cUuid } = router.query;
 
   const errMsgRef = useRef<HTMLParagraphElement>(null);
 
@@ -34,6 +34,12 @@ const CreateTaskContainer: React.FC = () => {
       enabled: !!uuid,
     }
   );
+
+  useEffect(() => {
+    if (cUuid && categoryName) {
+      setCategory({ value: cUuid, label: categoryName });
+    }
+  }, [cUuid, categoryName]);
 
   useEffect(() => {
     if (data !== undefined) {
@@ -95,7 +101,7 @@ const CreateTaskContainer: React.FC = () => {
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_KEY),
         });
-      } else if (notifiedTime?.value !== 0) {
+      } else if (notifiedTime?.value !== 0 && notifiedTime !== null) {
         errMsgRef.current.textContent = "You have denied notifications. The notify me feature will not work";
         setLoading(false);
         return;

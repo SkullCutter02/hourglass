@@ -67,7 +67,13 @@ const TaskLayout: React.FC<Props> = ({
       <form className="create-task-form" onSubmit={onSubmit}>
         <div className="form-section">
           <h1>{header}</h1>
-          <RegularInput placeholder={"Task name: "} name={"name"} margin={20} defaultValue={defaultName} />
+          <RegularInput
+            placeholder={"Task name: "}
+            name={"name"}
+            margin={20}
+            defaultValue={defaultName}
+            maxLength={199}
+          />
           <RegularTextArea
             name={"description"}
             placeholder={"Task description: (Optional)"}
@@ -75,6 +81,7 @@ const TaskLayout: React.FC<Props> = ({
             required={false}
             margin={10}
             defaultValue={defaultDescription}
+            maxLength={1999}
           />
           <div className="date-picker">
             <KeyboardDateTimePicker
