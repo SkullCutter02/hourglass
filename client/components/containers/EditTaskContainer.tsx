@@ -77,21 +77,27 @@ const EditTaskContainer: React.FC = () => {
         return;
       }
 
-      if (!("Notification" in window) && notifiedTime?.value !== 0 && hasDueDate) {
+      if (!("Notification" in window) && notifiedTime?.value !== 0 && hasDueDate && notifiedTime !== null) {
         errMsgRef.current.textContent =
           "Notifications are not supported in your browser. The notify me feature will not work";
         setLoading(false);
         return;
       }
 
-      if (!("serviceWorker" in navigator) && notifiedTime?.value !== 0 && hasDueDate) {
+      if (
+        !("serviceWorker" in navigator) &&
+        notifiedTime?.value !== 0 &&
+        hasDueDate &&
+        notifiedTime !== null
+      ) {
         errMsgRef.current.textContent =
           "Service workers are not supported in your browser. The notify me feature will not work";
         setLoading(false);
         return;
       }
 
-      const permission = notifiedTime?.value !== 0 ? await requestPermission() : false;
+      const permission =
+        notifiedTime?.value !== 0 && hasDueDate && notifiedTime !== null ? await requestPermission() : false;
 
       let register: ServiceWorkerRegistration;
       let subscription: PushSubscription;
