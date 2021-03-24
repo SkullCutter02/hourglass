@@ -34,7 +34,7 @@ const Hero: React.FC = () => {
           </div>
         )}
         <div className="hero-middle">
-          <img src={"/hourglass.png"} alt="hourglass" className="hero-png" />
+          <img src={"/hourglass.jpeg"} alt="hourglass" className="hero-png" />
           <div className="hero-middle-right">
             <h1>Hourglass</h1>
             <p>
