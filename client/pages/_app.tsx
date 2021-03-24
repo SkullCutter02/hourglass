@@ -34,6 +34,11 @@ function App({ Component, pageProps }: AppLayoutProps) {
           <RecoilRoot>
             <Head>
               <title>Hourglass</title>
+              <meta
+                lang="en"
+                name="description"
+                content="Hourglass is a task app that allows you to create tasks and reminds you when a task is due. Never miss a due date again!"
+              />
               <link rel="preconnect" href="https://fonts.gstatic.com" />
               <link
                 href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
